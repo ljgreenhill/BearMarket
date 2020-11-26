@@ -1,4 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
+from flask_login import UserMixin
 
 db = SQLAlchemy()
 
@@ -19,8 +20,8 @@ association_post_interested = db.Table(
 class Post(db.Model):
     __tablename__ = 'post'
     id = db.Column(db.Integer, primary_key = True)
-    active = db.Column(db.Boolean, default=True)
-    #TODO item images
+    active = db.Column(db.Boolean, nullable=True)
+    images = db.Column(db.String, nullable=True)
     title = db.Column(db.String, nullable=False)
     description = db.Column(db.String, nullable=True)
     buyers = db.relationship('User', secondary=association_post_buyer, back_populates='buyer_posts')
@@ -41,7 +42,7 @@ class Post(db.Model):
             'active': self.active
         }
 
-class User(db.Model):
+class User(db.Model, UserMixin):
     __tablename__='user'
     id = db.Column(db.String, primary_key = True)
     name = db.Column(db.String, nullable=True)
@@ -62,10 +63,10 @@ class User(db.Model):
         bought = []
         sold = []
         selling = []
-        for post in self.interested_posts and post.serialize().get('active'):
+        for post in self.interested_posts and post.serialize().get('active') is None:
             interested.append(post.serialize())
         for post in self.seller_posts:            
-            if(post.serialize().get('active')):
+            if post.serialize().get('active') is None:
                 selling.append(post.serialize())
             else:
                 sold.append(post.serialize())
