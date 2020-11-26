@@ -2,7 +2,7 @@ import json
 import os
 
 from db import db
-from db import Course,User,Assignment
+from db import User, Post
 from flask import request
 from flask import Flask
 
@@ -29,11 +29,17 @@ def failure_response(message, code=404):
 
 @app.route("/")
 @app.route("/api/users/")
-def get_courses():
-    return success_response([c.serialize() for c in Course.query.all()])
+def get_users():
+    return success_response([u.serialize() for u in User.query.all()])
 
-@app.route("/api/posts/", methods=["POST"])
-def create_post():
+@app.route("/api/posts/")
+def get_posts():
+    return success_response([p.serialize() for p in Post.query.all()])
+
+@app.route("/api/posts/active/")
+def get_active_posts():
+    return success_response([p.serialize() for p in Post.query.filter_by(active=True)])
+
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
