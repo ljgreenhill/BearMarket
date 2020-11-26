@@ -43,10 +43,12 @@ class Post(db.Model):
 
 class User(db.Model):
     __tablename__='user'
-    id = db.Column(db.Integer, primary_key = True)
+    id = db.Column(db.String, primary_key = True)
+    name = db.Column(db.String, nullable=True)
     email = db.Column(db.String, nullable=False)
+    profile_pic = db.Column(db.String, nullable=True)
+    
     bio = db.Column(db.String, nullable=True)
-    #TODO: store image as profile_pic    
     seller_posts = db.relationship('Post', cascade='delete')
     buyer_posts = db.relationship('Post', secondary=association_post_buyer, back_populates='buyers')
     interested_posts = db.relationship('Post', secondary=association_post_interested, back_populates='interested')
