@@ -1,5 +1,4 @@
 #all Google OAuth code from https://realpython.com/flask-google-login/
-#https://stackoverflow.com/questions/26606391/flask-login-attributeerror-user-object-has-no-attribute-is-active
 
 import json
 import os
@@ -131,7 +130,7 @@ def create_user():
     body = json.loads(request.data)
     if(body.get('email') is None):
         return failure_response('No email provided')
-    new_user = User(email=body.get('email'), bio=body.get('bio'))
+    new_user = User(id=body.get('id'),email=body.get('email'), bio=body.get('bio'))
     db.session.add(new_user)
     db.session.commit()
     return success_response(new_user.serialize(), 201)
@@ -146,8 +145,8 @@ def create_post():
     db.session.commit()
     return success_response(new_post.serialize(), 201)
 
-@app.route("/posts/buy/", methods=["POST"])
-def buy_item(post_id, buyer_id):
+@app.route("/posts/buy/int:<post_id>/", methods=["POST"])
+def buy_item(post_id):
     post = Post.query.filter_by(id=post_id).first()
     if post is None:
         return failure_response('Item not found')
@@ -161,6 +160,22 @@ def buy_item(post_id, buyer_id):
 @app.route("/users/current/")
 def get_current_user():
     return success_response(current_user.serialize())
+
+@app.route("/users/<string:user_id>/")
+def get_specific_user(user_id):
+    user = User.query.filter_by(id=user_id).first()
+    if user is None:
+        return failure_response('User not found')
+    return success_response(user.serialize())
+
+@app.route("/posts/<int:post_id>/", methods=["DELETE"])
+def delete_post(post_id):
+    post = Post.query.filter_by(id=post_id).first()
+    if post is None:
+        return failure_response('Post not found')
+    db.session.delete(post)
+    db.session.commit()
+    return success_response(post.serialize())
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
