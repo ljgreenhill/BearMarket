@@ -1,7 +1,7 @@
 import json
 import os
 from db import db
-from db import User, Post
+from db import User, Post, Conversation, Message
 from flask import Flask, redirect, request, url_for
 from oauthlib.oauth2 import WebApplicationClient
 import requests
@@ -176,6 +176,31 @@ def delete_post(post_id):
     db.session.delete(post)
     db.session.commit()
     return success_response(post.serialize())
+
+@app.route("/conversations/send/", methods=["GET"])
+def send_message():
+    body = json.loads(request.data)
+    if(body.get('receiver') is None):
+        return failure_response('No receiver')
+    if(body.get('contents') is None):
+        return failure_response('Empty message')
+    receiver = body.get('receiver')
+    contents = body.get('contents')
+    conversationA = Conversation.query.filter_by(this_user=current_user.id, other_user=receiver).first()
+    conversationB = Conversation.query.filter_by(this_user=receiver, other_user=current_user.id).first()
+    if(conversationA is None):
+        new_conversationA = Conversation(this_user=current_user.id, other_user=receiver)
+        db.session.add(new_conversationA)
+    if(conversationB is None):
+        new_conversationB = Conversation(this_user=receiver, other_user=current_user.id)
+        db.session.add(new_conversationB)
+    db.session.commit()
+    new_messageA = Message(sender=current_user.id, receiver = receiver, contents=contents, conversation_id=conversationA.id)
+    new_messageB = Message(sender=receiver, receiver = current_user.id, contents=contents, conversation_id=conversationB.id)
+    db.session.add(new_messageA)
+    db.session.add(new_messageB)
+    db.session.commit()
+    return success_response(new_messageA.serialize(), 201)
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
