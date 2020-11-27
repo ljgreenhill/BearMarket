@@ -1,5 +1,3 @@
-#all Google OAuth code from https://realpython.com/flask-google-login/
-
 import json
 import os
 from db import db
@@ -61,6 +59,7 @@ def get_user(user_id):
     else:
         return user
 
+#all Google OAuth code from https://realpython.com/flask-google-login/--------------------
 @app.route("/")
 def login():
     google_provider_cfg = get_google_provider_cfg()
@@ -107,6 +106,7 @@ def callback():
     db.session.commit()
     login_user(user)
     return success_response(user.serialize(), 201)
+#-------------------------------------------------------------------------------------------------
 
 @app.route("/logout")
 def logout():
