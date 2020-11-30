@@ -24,7 +24,7 @@ class Post(db.Model):
     images = db.Column(db.String, nullable=True)
     title = db.Column(db.String, nullable=False)
     description = db.Column(db.String, nullable=True)
-    buyers = db.relationship('User', secondary=association_post_buyer, back_populates='buyer_posts')
+    buyer = db.relationship('User', secondary=association_post_buyer, back_populates='buyer_posts')
     seller = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)    
     interested = db.relationship('User', secondary=association_post_interested, back_populates='interested_posts')
 
@@ -48,10 +48,9 @@ class User(db.Model, UserMixin):
     name = db.Column(db.String, nullable=True)
     email = db.Column(db.String, nullable=False)
     profile_pic = db.Column(db.String, nullable=True)
-    
     bio = db.Column(db.String, nullable=True)
     seller_posts = db.relationship('Post', cascade='delete')
-    buyer_posts = db.relationship('Post', secondary=association_post_buyer, back_populates='buyers')
+    buyer_posts = db.relationship('Post', secondary=association_post_buyer, back_populates='buyer')
     interested_posts = db.relationship('Post', secondary=association_post_interested, back_populates='interested')
 
     def __innit__(self, **kwargs):

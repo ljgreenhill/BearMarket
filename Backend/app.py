@@ -123,7 +123,7 @@ def get_posts():
 
 @app.route("/posts/active/")
 def get_active_posts():
-    return success_response([p.serialize() for p in Post.query.filter_by(active=True)])
+    return success_response([p.serialize() for p in Post.query.filter_by(active=None)])
 
 @app.route("/users/", methods=["POST"])
 def create_user():
@@ -145,16 +145,16 @@ def create_post():
     db.session.commit()
     return success_response(new_post.serialize(), 201)
 
-@app.route("/posts/buy/int:<post_id>/", methods=["POST"])
+@app.route("/posts/buy/<int:post_id>/", methods=["POST"])
 def buy_item(post_id):
     post = Post.query.filter_by(id=post_id).first()
     if post is None:
         return failure_response('Item not found')
-    if not post.active:
+    if post.active != None:
         return failure_response('Item inactive')
-    if current_user.id == post.seller:
-        return failure_response('Buyer and seller are the same')
     post.active = False
+    post.buyer.append(current_user)
+    db.session.commit()
     return success_response(post.serialize())
 
 @app.route("/users/current/")
