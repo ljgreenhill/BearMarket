@@ -30,6 +30,7 @@ GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID", None)
 GOOGLE_CLIENT_SECRET = os.environ.get("GOOGLE_CLIENT_SECRET", None)
 GOOGLE_DISCOVERY_URL = ("https://accounts.google.com/.well-known/openid-configuration")
 
+#login manager to get current user
 login_manager = LoginManager()
 login_manager.init_app(app)
 
@@ -44,13 +45,6 @@ client = WebApplicationClient(GOOGLE_CLIENT_ID)
 def get_google_provider_cfg():
     return requests.get(GOOGLE_DISCOVERY_URL).json()
 
-# generalized response formats
-def success_response(data, code=200):
-    return json.dumps({"success": True, "data": data}), code
-
-def failure_response(message, code=404):
-    return json.dumps({"success": False, "error": message}), code
-
 @login_manager.user_loader
 def get_user(user_id):
     user = User.query.filter_by(id=user_id).first()
@@ -59,7 +53,14 @@ def get_user(user_id):
     else:
         return user
 
-#all Google OAuth code from https://realpython.com/flask-google-login/--------------------
+# generalized response formats
+def success_response(data, code=200):
+    return json.dumps({"success": True, "data": data}), code
+
+def failure_response(message, code=404):
+    return json.dumps({"success": False, "error": message}), code
+
+#all Google OAuth code from https://realpython.com/flask-google-login/----------------------------
 @app.route("/")
 def login():
     google_provider_cfg = get_google_provider_cfg()
@@ -108,6 +109,7 @@ def callback():
     return success_response(user.serialize(), 201)
 #-------------------------------------------------------------------------------------------------
 
+#user routes
 @app.route("/logout")
 def logout():
     logout_user()
@@ -116,14 +118,6 @@ def logout():
 @app.route("/users/")
 def get_users():
     return success_response([u.serialize() for u in User.query.all()])
-
-@app.route("/posts/")
-def get_posts():
-    return success_response([p.serialize() for p in Post.query.all()])
-
-@app.route("/posts/active/")
-def get_active_posts():
-    return success_response([p.serialize() for p in Post.query.filter_by(active=None)])
 
 @app.route("/users/", methods=["POST"])
 def create_user():
@@ -134,6 +128,35 @@ def create_user():
     db.session.add(new_user)
     db.session.commit()
     return success_response(new_user.serialize(), 201)
+
+@app.route("/users/current/")
+def get_current_user():
+    return success_response(current_user.serialize())
+
+@app.route("/users/<string:user_id>/")
+def get_specific_user(user_id):
+    user = User.query.filter_by(id=user_id).first()
+    if user is None:
+        return failure_response('User not found')
+    return success_response(user.serialize())
+
+@app.route("/users/<string:user_id>/", methods=["DELETE"])
+def delete_user(user_id):
+    user = User.query.filter_by(id=user_id).first()
+    if user is None:
+        return failure_response('User not found')
+    db.session.delete(user)
+    db.session.commit()
+    return success_response(user.serialize())
+
+#post routes
+@app.route("/posts/")
+def get_posts():
+    return success_response([p.serialize() for p in Post.query.all()])
+
+@app.route("/posts/active/")
+def get_active_posts():
+    return success_response([p.serialize() for p in Post.query.filter_by(active=None)])
 
 @app.route("/posts/", methods=["POST"])
 def create_post():
@@ -157,17 +180,6 @@ def buy_item(post_id):
     db.session.commit()
     return success_response(post.serialize())
 
-@app.route("/users/current/")
-def get_current_user():
-    return success_response(current_user.serialize())
-
-@app.route("/users/<string:user_id>/")
-def get_specific_user(user_id):
-    user = User.query.filter_by(id=user_id).first()
-    if user is None:
-        return failure_response('User not found')
-    return success_response(user.serialize())
-
 @app.route("/posts/<int:post_id>/", methods=["DELETE"])
 def delete_post(post_id):
     post = Post.query.filter_by(id=post_id).first()
@@ -177,26 +189,27 @@ def delete_post(post_id):
     db.session.commit()
     return success_response(post.serialize())
 
-@app.route("/conversations/send/", methods=["GET"])
-def send_message():
+#direct messaging routes
+@app.route("/conversations/send/<int:receiver_id>/", methods=["POST"])
+def send_message(receiver_id):
     body = json.loads(request.data)
-    if(body.get('receiver') is None):
-        return failure_response('No receiver')
     if(body.get('contents') is None):
         return failure_response('Empty message')
-    receiver = body.get('receiver')
+    receiver = User.query.filter_by(id=receiver_id).first()
+    if receiver is None:
+        return failure_response('User not found')
     contents = body.get('contents')
-    conversationA = Conversation.query.filter_by(this_user=current_user.id, other_user=receiver).first()
-    conversationB = Conversation.query.filter_by(this_user=receiver, other_user=current_user.id).first()
+    conversationA = Conversation.query.filter_by(this_user=current_user.id, other_user=receiver_id).first()
+    conversationB = Conversation.query.filter_by(this_user=receiver_id, other_user=current_user.id).first()
     if(conversationA is None):
-        new_conversationA = Conversation(this_user=current_user.id, other_user=receiver)
+        new_conversationA = Conversation(this_user=current_user.id, other_user=receiver_id)
         db.session.add(new_conversationA)
     if(conversationB is None):
-        new_conversationB = Conversation(this_user=receiver, other_user=current_user.id)
+        new_conversationB = Conversation(this_user=receiver_id, other_user=current_user.id)
         db.session.add(new_conversationB)
     db.session.commit()
-    new_messageA = Message(sender=current_user.id, receiver = receiver, contents=contents, conversation_id=conversationA.id)
-    new_messageB = Message(sender=receiver, receiver = current_user.id, contents=contents, conversation_id=conversationB.id)
+    new_messageA = Message(sender=current_user.id, receiver = receiver_id, contents=contents, conversation_id=conversationA.id)
+    new_messageB = Message(sender=receiver_id, receiver = current_user.id, contents=contents, conversation_id=conversationB.id)
     db.session.add(new_messageA)
     db.session.add(new_messageB)
     db.session.commit()
