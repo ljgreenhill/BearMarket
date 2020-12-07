@@ -28,7 +28,7 @@ class Post(db.Model):
     seller = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)    
     interested = db.relationship('User', secondary=association_post_interested, back_populates='interested_posts')
 
-    def __innit__(self, **kwargs):
+    def __init__(self, **kwargs):
         self.active = True
         self.title = kwargs.get('title', '')
         self.description = kwargs.get('description', '')
@@ -53,7 +53,7 @@ class User(db.Model, UserMixin):
     buyer_posts = db.relationship('Post', secondary=association_post_buyer, back_populates='buyer')
     interested_posts = db.relationship('Post', secondary=association_post_interested, back_populates='interested')
 
-    def __innit__(self, **kwargs):
+    def __init__(self, **kwargs):
         self.id = kwargs.get('id', '')
         self.email = kwargs.get('email', '')
         self.bio = kwargs.get('bio', '')
@@ -83,55 +83,8 @@ class User(db.Model, UserMixin):
             'bought': bought
         }
 
-class Conversation(db.Model):
-    __tablename__ = 'conversation'
-    id = db.Column(db.Integer, primary_key = True)
-    this_user = db.Column(db.String, nullable = False)
-    other_user = db.Column(db.String, nullable = False)
-    messages = db.relationship('Message', cascade='delete')
 
-    def __innit__(self, **kwargs):
-        self.this_user = kwargs.get('this_user', '')
-        self.other_user = kwargs.get('other_user', '')
-        
-    def serialize(self):
-        messages_from_user = []
-        messages_to_user = []
-        for message in self.messages:
-            if message.sender == self.this_user.id:
-                messages_from_user.append(message)
-            else:
-                messages_to_user.append(message)
-        return {
-            'id': self.id,
-            'this_user': self.this_user,
-            'other_user': self.other_user,
-            'messages_from_user': messages_from_user,
-            'messages_to_user': messages_to_user
-        }
 
-class Message(db.Model):
-    __tablename__ = 'message'
-    id = db.Column(db.Integer, primary_key = True)
-    sender = db.Column(db.String, nullable = False)
-    receiver = db.Column(db.String, nullable = False)
-    contents = db.Column(db.String, nullable = False)
-
-    conversation_id = db.Column(db.Integer, db.ForeignKey('conversation.id'), nullable=False)
-
-    def __innit__(self, **kwargs):
-        self.sender = kwargs.get('sender', '')
-        self.receiver = kwargs.get('receiver', '')
-        self.contents = kwargs.get('contents', '')
-
-    def serialize(self):
-        return {
-            'id': self.id,
-            'sender': self.sender,
-            'receiver': self.receiver,
-            'contents': self.contents
-        }
-    
 
     
 

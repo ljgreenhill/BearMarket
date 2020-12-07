@@ -189,32 +189,6 @@ def delete_post(post_id):
     db.session.commit()
     return success_response(post.serialize())
 
-#direct messaging routes
-@app.route("/conversations/send/<int:receiver_id>/", methods=["POST"])
-def send_message(receiver_id):
-    body = json.loads(request.data)
-    if(body.get('contents') is None):
-        return failure_response('Empty message')
-    receiver = User.query.filter_by(id=receiver_id).first()
-    if receiver is None:
-        return failure_response('User not found')
-    contents = body.get('contents')
-    conversationA = Conversation.query.filter_by(this_user=current_user.id, other_user=receiver_id).first()
-    conversationB = Conversation.query.filter_by(this_user=receiver_id, other_user=current_user.id).first()
-    if(conversationA is None):
-        new_conversationA = Conversation(this_user=current_user.id, other_user=receiver_id)
-        db.session.add(new_conversationA)
-    if(conversationB is None):
-        new_conversationB = Conversation(this_user=receiver_id, other_user=current_user.id)
-        db.session.add(new_conversationB)
-    db.session.commit()
-    new_messageA = Message(sender=current_user.id, receiver = receiver_id, contents=contents, conversation_id=conversationA.id)
-    new_messageB = Message(sender=receiver_id, receiver = current_user.id, contents=contents, conversation_id=conversationB.id)
-    db.session.add(new_messageA)
-    db.session.add(new_messageB)
-    db.session.commit()
-    return success_response(new_messageA.serialize(), 201)
-
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     app.run(host='127.0.0.1', port=port, ssl_context='adhoc')
