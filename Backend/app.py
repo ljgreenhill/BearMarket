@@ -1,6 +1,7 @@
 import json
 import os
 from db import db
+from flask_talisman import Talisman
 from db import User, Post
 from flask import Flask, redirect, request, url_for
 from oauthlib.oauth2 import WebApplicationClient
@@ -17,6 +18,10 @@ from flask_login import (
 # define db filename
 db_filename = "bear_market.db"
 app = Flask(__name__)
+csp = {
+    'default-src': 'https://bear-market.herokuapp.com'
+}
+Talisman(app, content_security_policy=csp)
 
 app.secret_key = os.urandom(24)
 
@@ -158,6 +163,10 @@ def get_posts():
 def get_active_posts():
     return success_response([p.serialize() for p in Post.query.filter((Post.active==None) | (Post.active==True))])
 
+'''@app.route("/posts/interested/")
+def get_interested_posts():
+    return success_response([p.serialize() for p in Post.query.filter_by(current_user.in_(Post.interested))])'''
+
 @app.route("/posts/", methods=["POST"])
 def create_post():
     body = json.loads(request.data)
@@ -173,10 +182,21 @@ def buy_item(post_id):
     post = Post.query.filter_by(id=post_id).first()
     if post is None:
         return failure_response('Item not found')
-    if post.active != None:
+    if post.active != None and post.active != True:
         return failure_response('Item inactive')
     post.active = False
     post.buyer.append(current_user)
+    db.session.commit()
+    return success_response(post.serialize())
+
+@app.route("/posts/interested/<int:post_id>/", methods=["POST"])
+def interested_in_item(post_id):
+    post = Post.query.filter_by(id=post_id).first()
+    if post is None:
+        return failure_response('Item not found')
+    if post.active != None and post.active != True:
+        return failure_response('Item inactive')
+    post.interested.append(current_user)
     db.session.commit()
     return success_response(post.serialize())
 
@@ -190,5 +210,6 @@ def delete_post(post_id):
     return success_response(post.serialize())
 
 if __name__ == "__main__":
+    #app.run(host='127.0.0.1', port=port, ssl_context='adhoc')
     port = int(os.environ.get("PORT", 5000))
-    app.run(host='127.0.0.1', port=port, ssl_context='adhoc')
+    app.run(host='0.0.0.0', port=port)
