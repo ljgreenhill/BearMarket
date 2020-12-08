@@ -1,7 +1,7 @@
 import json
 import os
 from db import db
-from db import User, Post, Conversation, Message
+from db import User, Post
 from flask import Flask, redirect, request, url_for
 from oauthlib.oauth2 import WebApplicationClient
 import requests
@@ -156,7 +156,7 @@ def get_posts():
 
 @app.route("/posts/active/")
 def get_active_posts():
-    return success_response([p.serialize() for p in Post.query.filter_by(active=None)])
+    return success_response([p.serialize() for p in Post.query.filter((Post.active==None) | (Post.active==True))])
 
 @app.route("/posts/", methods=["POST"])
 def create_post():
