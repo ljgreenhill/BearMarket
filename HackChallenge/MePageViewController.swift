@@ -10,21 +10,61 @@ import UIKit
 class MePageViewController: UIViewController {
 
     var tagTableView: UITableView!
-    var postsCollectionView: UICollectionView!
+    var itemCollectionView: UICollectionView!
     var userName: UILabel!
     var email: UILabel!
     var bio: UITextView!
     var profilePic: UIImageView!
+    var addPostButton: UIButton!
+    var profileView: UIView!
     
     let itemCellReuseIdentifier = "itemCellReuseIdentifier"
     let padding: CGFloat = 8
     let tabHeight: CGFloat = 40
     
+    var tags: [UIImageView]! //delete later
+    //delete later
+    let item1 = Item(itemImage: "item1", itemName: "First Item", userImage: "user1", userName: "First User", price: "34.99")
+    let item2 = Item(itemImage: "item2", itemName: "Second Item", userImage: "user2", userName: "Second User", price: "20.00")
+    var items: [Item] = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         title = "Me"
+        navigationController?.navigationBar.barTintColor = UIColor(red: 225/255, green: 225/255, blue: 225/255, alpha: 1)
         view.backgroundColor = .white
+        
+        items = [item1, item2, item1, item2, item1, item2]
+        
+        //Profile
+        profileView = UIView()
+        view.addSubview(profileView)
+        
+        userName = UILabel()
+        userName.text = "Rachel"
+        userName.translatesAutoresizingMaskIntoConstraints = false
+        profileView.addSubview(userName)
+        
+        email = UILabel()
+        email.text = "rachel@mail.com"
+        email.translatesAutoresizingMaskIntoConstraints = false
+        profileView.addSubview(email)
+        
+        bio = UITextView()
+        bio.text = "this is me"
+        bio.translatesAutoresizingMaskIntoConstraints = false
+        profileView.addSubview(bio)
+        
+        profilePic = UIImageView()
+        profilePic.translatesAutoresizingMaskIntoConstraints = false
+        profileView.addSubview(profilePic)
+        
+        //Other
+        addPostButton = UIButton()
+        addPostButton.tintColor = .blue
+        addPostButton.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(addPostButton)
         
         //Tag Table View
         tagTableView = UITableView()
@@ -32,30 +72,55 @@ class MePageViewController: UIViewController {
         view.addSubview(tagTableView)
         
         //Posts Collection View
-        postsCollectionView = UICollectionView()
-        postsCollectionView.delegate = self
-        postsCollectionView.dataSource = self
-        postsCollectionView.translatesAutoresizingMaskIntoConstraints = false
-        //postsCollectionView.separatorStyle = .none
-        postsCollectionView.backgroundColor = UIColor(red: 239/255, green: 239/255, blue: 239/255, alpha: 1)
-        postsCollectionView.register(ItemCollectionViewCell.self, forCellWithReuseIdentifier: itemCellReuseIdentifier)
-        view.addSubview(postsCollectionView)
+        /**itemCollectionView = UICollectionView()
+        itemCollectionView.delegate = self
+        itemCollectionView.dataSource = self
+        itemCollectionView.translatesAutoresizingMaskIntoConstraints = false
+        itemCollectionView.separatorStyle = .none
+        itemCollectionView.backgroundColor = UIColor(red: 239/255, green: 239/255, blue: 239/255, alpha: 1)
+        itemCollectionView.register(ItemCollectionViewCell.self, forCellReuseIdentifier: itemCellReuseIdentifier)
+        view.addSubview(itemCollectionView)*/
         
-        //Other
+        //a5 version
+        let postsLayout = UICollectionViewFlowLayout()
+        postsLayout.minimumInteritemSpacing = padding
+        postsLayout.minimumLineSpacing = padding
+        postsLayout.scrollDirection = .horizontal
+        
+        itemCollectionView = UICollectionView(frame: .zero, collectionViewLayout: postsLayout)
+        itemCollectionView.backgroundColor = .white
+        itemCollectionView.translatesAutoresizingMaskIntoConstraints = false
+        itemCollectionView.register(ItemCollectionViewCell.self, forCellWithReuseIdentifier: itemCellReuseIdentifier)
+        itemCollectionView.dataSource = self
+        itemCollectionView.delegate = self
+        view.addSubview(itemCollectionView)
+        
         
         setupConstraints()
     }
 
 
     private func setupConstraints() {
-        NSLayoutConstraint.activate([])
+        NSLayoutConstraint.activate([
+            profileView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 30),
+            profileView.heightAnchor.constraint(equalToConstant: 200),
+            profileView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            profileView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
+        
+        NSLayoutConstraint.activate([
+            itemCollectionView.topAnchor.constraint(equalTo: profileView.bottomAnchor, constant: 10),
+            itemCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            itemCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            itemCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
     }
     
-    @objc func presentItemViewController() {
+    /**@objc func presentItemViewController() {
         let vc = itemViewController(delegate: self, titleString: ???idkWhatItIsCalled??.titleLabel?.text)
         vc.delegate = self
         navigationController?.pushViewController(vc, animated: true)
-    }
+    }*/
 
 }
 

@@ -14,6 +14,7 @@ class ItemCollectionViewCell: UICollectionViewCell {
     let itemNameLabel = UILabel()
     let userNameLabel = UILabel()
     let userImageView = UIImageView(frame: CGRect(x:0, y:0, width:25, height:25))
+    let priceLabel = UILabel()
     //let starButton = UIButton()
     //let starCountLabel = UILabel()
     
@@ -34,6 +35,12 @@ class ItemCollectionViewCell: UICollectionViewCell {
         itemImageView.layer.masksToBounds = true
         itemImageView.contentMode = .scaleAspectFill
         containerView.addSubview(itemImageView)
+        
+        priceLabel.backgroundColor = .gray
+        priceLabel.textColor = .white
+        priceLabel.translatesAutoresizingMaskIntoConstraints = false
+        priceLabel.font = .boldSystemFont(ofSize: 11)
+        containerView.addSubview(priceLabel)
         
         itemNameLabel.textColor = .black
         itemNameLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -79,6 +86,15 @@ class ItemCollectionViewCell: UICollectionViewCell {
         ])
         
         NSLayoutConstraint.activate([
+            //priceLabel.topAnchor.constraint(equalTo: itemNameLabel.topAnchor, constant: -30),
+            priceLabel.heightAnchor.constraint(equalToConstant: 18),
+            priceLabel.bottomAnchor.constraint(equalTo: itemImageView.bottomAnchor),
+            priceLabel.widthAnchor.constraint(equalToConstant: 40),
+            //priceLabel.leadingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20),
+            priceLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor)
+        ])
+        
+        NSLayoutConstraint.activate([
             itemNameLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 145),
             itemNameLabel.leadingAnchor.constraint(equalTo: itemImageView.leadingAnchor, constant: 6),
             itemNameLabel.trailingAnchor.constraint(equalTo: itemImageView.trailingAnchor, constant: -6),
@@ -106,6 +122,7 @@ class ItemCollectionViewCell: UICollectionViewCell {
         itemNameLabel.text = item.itemName
         userImageView.image = UIImage(named: item.userImage)
         userNameLabel.text = item.userName
+        priceLabel.text = "$" + item.price
     }
 }
 

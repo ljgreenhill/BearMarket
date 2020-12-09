@@ -12,4 +12,5 @@ struct Item {
     var itemName: String
     var userImage: String
     var userName: String
+    var price: String
 }
