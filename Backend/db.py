@@ -18,8 +18,8 @@ class Post(db.Model):
     image = db.Column(db.String, nullable=True)
     title = db.Column(db.String, nullable=False)
     description = db.Column(db.String, nullable=True)
-    buyer = db.Column(db.Integer, db.ForeignKey('user.id'))  
-    seller = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)  
+    buyer = db.Column(db.String, db.ForeignKey('user.id'))  
+    seller = db.Column(db.String, db.ForeignKey('user.id'), nullable=False)  
     interested = db.relationship('User', secondary=association_post_interested, back_populates='interested_posts')
     comments = db.relationship('Comment', cascade='delete')
 
@@ -96,9 +96,23 @@ class User(db.Model, UserMixin):
 class Comment(db.Model):
     __tablename__='comment'
     id = db.Column(db.Integer, primary_key = True)
-    sender = db.Column(db.String, nullable=True)
-    content = db.Column(db.String, nullable=True)
+    sender = db.Column(db.String, nullable=False)
+    content = db.Column(db.String, nullable=False)
     post = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=False)  
+
+    def __init__(self, **kwargs):
+        self.sender = kwargs.get('sender')
+        self.content = kwargs.get('image')
+        self.post = kwargs.get('post')
+
+    def serialize(self):
+        return {
+            'id': self.id,
+            'sender': self.sender,
+            'content': self.content,
+        }
+
+
 
 
 

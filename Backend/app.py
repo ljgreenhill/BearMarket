@@ -2,7 +2,7 @@ import json
 import os
 from db import db
 from flask_talisman import Talisman
-from db import User, Post
+from db import User, Post, Comment
 from flask import Flask, redirect, request, url_for
 from oauthlib.oauth2 import WebApplicationClient
 import requests
@@ -65,6 +65,13 @@ def success_response(data, code=200):
 def failure_response(message, code=404):
     return json.dumps({"success": False, "error": message}), code
 
+def logged_in(user):
+    try:
+        user.serialize()
+        return True
+    except AttributeError:
+        return False
+        
 #all Google OAuth code from https://realpython.com/flask-google-login/----------------------------
 @app.route("/")
 def login():
@@ -115,30 +122,23 @@ def callback():
 #-------------------------------------------------------------------------------------------------
 
 #user routes
-@app.route("/logout")
+@app.route("/logout/", methods=["GET"])
 def logout():
     logout_user()
-    return success_response("Logged out", 201)
+    return success_response("User logged out")
 
-@app.route("/users/")
+@app.route("/users/", methods=["GET"])
 def get_users():
     return success_response([u.serialize() for u in User.query.all()])
 
-@app.route("/users/", methods=["POST"])
-def create_user():
-    body = json.loads(request.data)
-    if(body.get('email') is None):
-        return failure_response('No email provided')
-    new_user = User(id=body.get('id'),email=body.get('email'), bio=body.get('bio'))
-    db.session.add(new_user)
-    db.session.commit()
-    return success_response(new_user.serialize(), 201)
+@app.route("/users/current/", methods=["GET"])
+def get_current_user():  
+    if logged_in(current_user) == True:
+        return success_response(current_user.serialize())
+    else:
+        return failure_response("User logged out")
 
-@app.route("/users/current/")
-def get_current_user():
-    return success_response(current_user.serialize())
-
-@app.route("/users/<string:user_id>/")
+@app.route("/users/<string:user_id>/", methods=["GET"])
 def get_specific_user(user_id):
     user = User.query.filter_by(id=user_id).first()
     if user is None:
@@ -155,11 +155,11 @@ def delete_user(user_id):
     return success_response(user.serialize())
 
 #post routes
-@app.route("/posts/")
+@app.route("/posts/", methods=["GET"])
 def get_posts():
     return success_response([p.serialize() for p in Post.query.all()])
 
-@app.route("/posts/active/")
+@app.route("/posts/active/", methods=["GET"])
 def get_active_posts():
     return success_response([p.serialize() for p in Post.query.filter((Post.active==None) | (Post.active==True))])
 
@@ -170,6 +170,8 @@ def create_post():
         return failure_response('No title provided')
     if(body.get('price') is None):
         return failure_response('No price provided')
+    if not logged_in(current_user):
+        return failure_response('User not logged in')
     new_post = Post(title=body.get('title'), description=body.get('description'), seller=current_user.id, price=body.get('price'), image=body.get('image'))
     db.session.add(new_post)
     db.session.commit()
@@ -183,7 +185,9 @@ def buy_item(post_id):
     if post.active != None and post.active != True:
         return failure_response('Item inactive')
     post.active = False
-    post.buyer.append(current_user)
+    if not logged_in(current_user):
+        return failure_response('User not logged in')
+    post.buyer = current_user.id
     db.session.commit()
     return success_response(post.serialize())
 
@@ -203,9 +207,35 @@ def interested_in_item(post_id):
         return failure_response('Item not found')
     if post.active != None and post.active != True:
         return failure_response('Item inactive')
+    if not logged_in(current_user):
+        return failure_response('User not logged in')
     post.interested.append(current_user)
     db.session.commit()
     return success_response(current_user.serialize())
+
+@app.route("/posts/comment/<int:post_id>/", methods=["POST"])
+def comment_on_item(post_id):
+    post = Post.query.filter_by(id=post_id).first()
+    if post is None:
+        return failure_response('Item not found')
+    if post.active != None and post.active != True:
+        return failure_response('Item inactive')
+    body = json.loads(request.data)
+    if(body.get('content') is None):
+        return failure_response('No message provided')
+    if not logged_in(current_user):
+        return failure_response('User not logged in')
+    new_comment = Comment(sender=current_user.id, content=body.get('content'), post=post_id)
+    db.session.add(new_comment)
+    db.session.commit()
+    return success_response(post.serialize())
+
+@app.route("/posts/<int:post_id>/", methods=["GET"])
+def get_specific_post(post_id):
+    post = Post.query.filter_by(id=post_id).first()
+    if post is None:
+        return failure_response('Post not found')
+    return success_response(post.serialize())
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
