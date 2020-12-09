@@ -163,16 +163,14 @@ def get_posts():
 def get_active_posts():
     return success_response([p.serialize() for p in Post.query.filter((Post.active==None) | (Post.active==True))])
 
-'''@app.route("/posts/interested/")
-def get_interested_posts():
-    return success_response([p.serialize() for p in Post.query.filter_by(current_user.in_(Post.interested))])'''
-
 @app.route("/posts/", methods=["POST"])
 def create_post():
     body = json.loads(request.data)
     if(body.get('title') is None):
         return failure_response('No title provided')
-    new_post = Post(title=body.get('title'), description=body.get('description'), seller=current_user.id)
+    if(body.get('price') is None):
+        return failure_response('No price provided')
+    new_post = Post(title=body.get('title'), description=body.get('description'), seller=current_user.id, price=body.get('price'), image=body.get('image'))
     db.session.add(new_post)
     db.session.commit()
     return success_response(new_post.serialize(), 201)
@@ -189,17 +187,6 @@ def buy_item(post_id):
     db.session.commit()
     return success_response(post.serialize())
 
-'''@app.route("/posts/interested/<int:post_id>/", methods=["POST"])
-def interested_in_item(post_id):
-    post = Post.query.filter_by(id=post_id).first()
-    if post is None:
-        return failure_response('Item not found')
-    if post.active != None and post.active != True:
-        return failure_response('Item inactive')
-    post.interested.append(current_user)
-    db.session.commit()
-    return success_response(post.serialize())'''
-
 @app.route("/posts/<int:post_id>/", methods=["DELETE"])
 def delete_post(post_id):
     post = Post.query.filter_by(id=post_id).first()
@@ -208,6 +195,17 @@ def delete_post(post_id):
     db.session.delete(post)
     db.session.commit()
     return success_response(post.serialize())
+
+@app.route("/posts/interested/<int:post_id>/", methods=["POST"])
+def interested_in_item(post_id):
+    post = Post.query.filter_by(id=post_id).first()
+    if post is None:
+        return failure_response('Item not found')
+    if post.active != None and post.active != True:
+        return failure_response('Item inactive')
+    post.interested.append(current_user)
+    db.session.commit()
+    return success_response(current_user.serialize())
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
