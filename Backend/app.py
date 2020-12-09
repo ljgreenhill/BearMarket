@@ -189,7 +189,7 @@ def buy_item(post_id):
     db.session.commit()
     return success_response(post.serialize())
 
-@app.route("/posts/interested/<int:post_id>/", methods=["POST"])
+'''@app.route("/posts/interested/<int:post_id>/", methods=["POST"])
 def interested_in_item(post_id):
     post = Post.query.filter_by(id=post_id).first()
     if post is None:
@@ -198,7 +198,7 @@ def interested_in_item(post_id):
         return failure_response('Item inactive')
     post.interested.append(current_user)
     db.session.commit()
-    return success_response(post.serialize())
+    return success_response(post.serialize())'''
 
 @app.route("/posts/<int:post_id>/", methods=["DELETE"])
 def delete_post(post_id):
@@ -210,6 +210,6 @@ def delete_post(post_id):
     return success_response(post.serialize())
 
 if __name__ == "__main__":
-    #app.run(host='127.0.0.1', port=port, ssl_context='adhoc')
     port = int(os.environ.get("PORT", 5000))
-    app.run(host='0.0.0.0', port=port)
+    app.run(host='127.0.0.1', port=port, ssl_context='adhoc')
+    #app.run(host='0.0.0.0', port=port)
