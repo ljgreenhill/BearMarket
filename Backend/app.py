@@ -15,15 +15,14 @@ from flask_login import (
     UserMixin
 )
 
+
 # define db filename
 db_filename = "bear_market.db"
 app = Flask(__name__)
-csp = {
-    'default-src': 'https://bear-market.herokuapp.com'
-}
-Talisman(app, content_security_policy=csp)
+#Talisman(app)
 
-app.secret_key = os.urandom(24)
+
+#app.secret_key = os.urandom(24)
 
 # setup config
 app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{db_filename}"
@@ -46,6 +45,13 @@ with app.app_context():
 
 # OAuth 2 client setup
 client = WebApplicationClient(GOOGLE_CLIENT_ID)
+
+
+
+def checkURL(url):
+    if "https" not in url:
+        url = url.replace("http", "https")     
+    return url
 
 def get_google_provider_cfg():
     return requests.get(GOOGLE_DISCOVERY_URL).json()
@@ -82,19 +88,29 @@ def login():
         redirect_uri=request.base_url + "callback",
         scope=["openid", "email", "profile"],
     )
-    return redirect(request_uri)
+    return redirect(checkURL(request_uri))
+    
 
 @app.route("/callback")
 def callback():
     code = request.args.get("code")
     google_provider_cfg = get_google_provider_cfg()
     token_endpoint = google_provider_cfg["token_endpoint"]
+
+
+    #good up to here
+    
     token_url, headers, body = client.prepare_token_request(
-        token_endpoint,
-        authorization_response=request.url,
-        redirect_url=request.base_url,
+        checkURL(token_endpoint),
+        authorization_response=checkURL(request.url),
+        redirect_url=checkURL(request.base_url),
         code=code
     )
+
+    
+
+    '''token_url = checkURL(token_url)
+    
     token_response = requests.post(
         token_url,
         headers=headers,
@@ -118,7 +134,7 @@ def callback():
     db.session.add(user)
     db.session.commit()
     login_user(user)
-    return success_response(user.serialize(), 201)
+    return success_response(user.serialize(), 201)'''
 #-------------------------------------------------------------------------------------------------
 
 #user routes
@@ -239,5 +255,5 @@ def get_specific_post(post_id):
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
-    app.run(host='127.0.0.1', port=port, ssl_context='adhoc')
-    #app.run(host='0.0.0.0', port=port)
+    #app.run(host='127.0.0.1', port=port, ssl_context='adhoc')
+    app.run(host='0.0.0.0', port=port)
