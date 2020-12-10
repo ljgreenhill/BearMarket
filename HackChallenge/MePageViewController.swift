@@ -85,7 +85,7 @@ class MePageViewController: UIViewController {
         let postsLayout = UICollectionViewFlowLayout()
         postsLayout.minimumInteritemSpacing = padding
         postsLayout.minimumLineSpacing = padding
-        postsLayout.scrollDirection = .horizontal
+        postsLayout.scrollDirection = .vertical
         
         itemCollectionView = UICollectionView(frame: .zero, collectionViewLayout: postsLayout)
         itemCollectionView.backgroundColor = .white
@@ -109,7 +109,38 @@ class MePageViewController: UIViewController {
         ])
         
         NSLayoutConstraint.activate([
-            itemCollectionView.topAnchor.constraint(equalTo: profileView.bottomAnchor, constant: 10),
+            userName.topAnchor.constraint(equalTo: profileView.safeAreaLayoutGuide.topAnchor, constant: 30),
+            userName.heightAnchor.constraint(equalToConstant: 30),
+            userName.leadingAnchor.constraint(equalTo: profileView.leadingAnchor),
+            userName.trailingAnchor.constraint(equalTo: profileView.trailingAnchor),
+            userName.centerXAnchor.constraint(equalTo: profileView.centerXAnchor)
+        ])
+        
+        NSLayoutConstraint.activate([
+            profilePic.topAnchor.constraint(equalTo: userName.bottomAnchor, constant: 30),
+            profilePic.heightAnchor.constraint(equalToConstant: 60),
+            profilePic.leadingAnchor.constraint(equalTo: profileView.leadingAnchor),
+            profilePic.trailingAnchor.constraint(equalTo: profileView.trailingAnchor),
+            profilePic.centerXAnchor.constraint(equalTo: profileView.centerXAnchor)
+        ])
+        
+        NSLayoutConstraint.activate([
+            email.topAnchor.constraint(equalTo: profilePic.bottomAnchor, constant: 30),
+            email.heightAnchor.constraint(equalToConstant: 30),
+            email.leadingAnchor.constraint(equalTo: profileView.leadingAnchor),
+            email.trailingAnchor.constraint(equalTo: profileView.trailingAnchor),
+            email.centerXAnchor.constraint(equalTo: profileView.centerXAnchor)
+        ])
+        
+        NSLayoutConstraint.activate([
+            tagTableView.topAnchor.constraint(equalTo: profileView.bottomAnchor, constant: 10),
+            tagTableView.heightAnchor.constraint(equalToConstant: 50),
+            tagTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tagTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
+        
+        NSLayoutConstraint.activate([
+            itemCollectionView.topAnchor.constraint(equalTo: tagTableView.bottomAnchor, constant: 10),
             itemCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             itemCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             itemCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor)

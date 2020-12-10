@@ -2,11 +2,19 @@
 //  User.swift
 //  HackChallenge
 //
-//  Created by Edward on 12/9/20.
+//  Created by Rachel on 12/9/20.
 //
 
 import UIKit
 
-class User: NSObject {
-
+struct User {
+    let id: Int
+    let name: String
+    let email: String
+    let profilePic: UIImageView
+    let interested: [Item]
+    let selling: [Item]
+    let sold: [Item]
+    let bought: [Item]
 }
+
