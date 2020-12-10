@@ -1,6 +1,6 @@
 version: "3"
 services:    
     bmv1:        
-        image: bmv1         
+        image: ljg227/bear-market         
         ports:                
             - "5000:5000"        

@@ -1,7 +1,74 @@
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
+import base64
+import boto3
+import datetime
+from io import BytesIOI
+from mimetypes import guess_extension, guess_type
+import os
+from PIL import Image
+import random
+import re
+import string
 
 db = SQLAlchemy()
+
+EXTENSIONS = ["png", "gif", "jpg", "jpeg"]
+BASE_DIR = os.getcwd()
+S3_BUCKET = "cornellebay"
+S3_BASE_URL = f"https://{S3_BUCKET}.s3-us-east-2.amazonaws.com"
+
+class Asset(db.Model):
+    __tablename__ = "asset"
+
+    id = db.Column(id.Integer, primary_key=True)
+    base_url = db.Column(db.String, nullable=True)
+    salt = db.Column(db.String, nullable=False)
+    extension = db.Column(db.String, nullable=False)
+
+    def __init__(self, **kwargs):
+        self.create(kwargs.get("image_data"))
+
+    def serialize(self):
+        return{
+            "url": f"{self.base_url}/{self.salt}.{self.extension}"
+        }
+
+    def create(self, image_data):
+        try:
+            ext = guess_extension(guess_type(image_data)[0])[1:]
+            if ext not in EXTENSIONS:
+                raise Exception(f"Extension {ext} not supported!")
+            salt = "".join(
+                random.SystemRandom().choice(
+                    string.ascii_uppercase + string.digits
+                )
+                for _ in range(16)
+            )
+            img_str = re.sub("^data:image/.+;base64,", "", image_data)
+            img_data = base64.b64decode(img_str)
+            img = Image.open(BytesIOI(img_data))
+            self.base_url = S3_BASE_URL
+            self.salt = salt
+            self.extension = ext
+            img_filename = f"{salt}.{ext}"
+            self.upload(img, img_filename)
+        except Exception as e:
+            print(f"Unable to create image due to {e}")
+    
+    def upload(self, img, img_filename):
+        try:
+            img_temploc = f"{BASE_DIR}/{img_filename}"
+            img.save(img_temploc)
+            s3_client = boto3.client("s3")
+            s3_client.upload_file(img_temploc, S3_BUCKET, img_filename)
+            s3_resource = boto3.resource("s3")
+            object_acl = s3_resource.ObjectAcl(S3_BUCKET, img_filename)
+            object_acl.put(ACL="public-read")
+        except Exception as e:
+            print(f"Unable to create image due to {e}")
+
+
 
 association_post_interested = db.Table(
     'association_post_interested', 

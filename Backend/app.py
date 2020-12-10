@@ -1,9 +1,8 @@
 import json
 import os
 from db import db
-from flask_talisman import Talisman
 from db import User, Post, Comment
-from flask import Flask, redirect, request, url_for
+from flask import Flask, redirect, request, url_for, Request
 from oauthlib.oauth2 import WebApplicationClient
 import requests
 from flask_login import (
@@ -14,15 +13,24 @@ from flask_login import (
     logout_user,
     UserMixin
 )
+from loguru import logger
 
+#from https://stackoverflow.com/questions/14810795/flask-url-for-generating-http-url-instead-of-https/37842465#37842465
+class ReverseProxied(object):
+    def __init__(self, app):
+        self.app = app
+
+    def __call__(self, environ, start_response):
+        environ["wsgi.url_scheme"] = "https"
+        return self.app(environ, start_response)
+#---------------------------------------------------------------------------------------------------------------------
 
 # define db filename
 db_filename = "bear_market.db"
 app = Flask(__name__)
-#Talisman(app)
+app.wsgi_app = ReverseProxied(app.wsgi_app)
 
-
-#app.secret_key = os.urandom(24)
+app.secret_key = os.urandom(24)
 
 # setup config
 app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{db_filename}"
@@ -45,13 +53,6 @@ with app.app_context():
 
 # OAuth 2 client setup
 client = WebApplicationClient(GOOGLE_CLIENT_ID)
-
-
-
-def checkURL(url):
-    if "https" not in url:
-        url = url.replace("http", "https")     
-    return url
 
 def get_google_provider_cfg():
     return requests.get(GOOGLE_DISCOVERY_URL).json()
@@ -77,40 +78,30 @@ def logged_in(user):
         return True
     except AttributeError:
         return False
-        
+
 #all Google OAuth code from https://realpython.com/flask-google-login/----------------------------
 @app.route("/")
 def login():
-    google_provider_cfg = get_google_provider_cfg()
-    authorization_endpoint = google_provider_cfg["authorization_endpoint"]
+    #google_provider_cfg = get_google_provider_cfg()
+    authorization_endpoint = "https://accounts.google.com/o/oauth2/v2/auth"
     request_uri = client.prepare_request_uri(
         authorization_endpoint,
-        redirect_uri=request.base_url + "callback",
+        redirect_uri="https://bear-market.herokuapp.com/callback",
         scope=["openid", "email", "profile"],
     )
-    return redirect(checkURL(request_uri))
+    return redirect(request_uri)
     
-
 @app.route("/callback")
 def callback():
     code = request.args.get("code")
     google_provider_cfg = get_google_provider_cfg()
     token_endpoint = google_provider_cfg["token_endpoint"]
-
-
-    #good up to here
-    
     token_url, headers, body = client.prepare_token_request(
-        checkURL(token_endpoint),
-        authorization_response=checkURL(request.url),
-        redirect_url=checkURL(request.base_url),
+        token_endpoint,
+        authorization_response=request.url,
+        redirect_url=request.base_url,
         code=code
     )
-
-    
-
-    '''token_url = checkURL(token_url)
-    
     token_response = requests.post(
         token_url,
         headers=headers,
@@ -125,7 +116,7 @@ def callback():
         unique_id = userinfo_response.json()["sub"]
         users_email = userinfo_response.json()["email"]
         picture = userinfo_response.json()["picture"]
-        users_name = userinfo_response.json()["given_name"]
+        users_name = userinfo_response.json()["given_name"] + " " + userinfo_response.json()["family_name"]
     else:
         return failure_response('Email not authenticated by Google')
     user = User.query.filter_by(id=unique_id).first()
@@ -134,7 +125,7 @@ def callback():
     db.session.add(user)
     db.session.commit()
     login_user(user)
-    return success_response(user.serialize(), 201)'''
+    return success_response(user.serialize(), 201)
 #-------------------------------------------------------------------------------------------------
 
 #user routes
@@ -255,5 +246,4 @@ def get_specific_post(post_id):
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
-    #app.run(host='127.0.0.1', port=port, ssl_context='adhoc')
-    app.run(host='0.0.0.0', port=port)
+    app.run(host='0.0.0.0', port=port, debug=True)
