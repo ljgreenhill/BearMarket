@@ -19,12 +19,13 @@ S3_BUCKET = "cornellebay"
 S3_BASE_URL = f"https://{S3_BUCKET}.s3-us-east-2.amazonaws.com"
 
 class Asset(db.Model):
-    __tablename__ = "asset"
+    __tablename__ = "image"
 
     id = db.Column(id.Integer, primary_key=True)
-    base_url = db.Column(db.String, nullable=True)
+    base_url = db.Column(db.String, nullable=False)
     salt = db.Column(db.String, nullable=False)
     extension = db.Column(db.String, nullable=False)
+    post_id = db.Column(db.Integer, db.ForeignKey('post.id'), unique=True)
 
     def __init__(self, **kwargs):
         self.create(kwargs.get("image_data"))
@@ -65,6 +66,7 @@ class Asset(db.Model):
             s3_resource = boto3.resource("s3")
             object_acl = s3_resource.ObjectAcl(S3_BUCKET, img_filename)
             object_acl.put(ACL="public-read")
+            os.remove(img_temploc)
         except Exception as e:
             print(f"Unable to create image due to {e}")
 
@@ -82,7 +84,10 @@ class Post(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     active = db.Column(db.Boolean, nullable=True)
     price = db.Column(db.String, nullable=False)
-    image = db.Column(db.String, nullable=True)
+
+    image = db.relationship('Asset', backref='post', uselist=False)
+
+
     title = db.Column(db.String, nullable=False)
     description = db.Column(db.String, nullable=True)
     buyer = db.Column(db.String, db.ForeignKey('user.id'))  
@@ -95,7 +100,6 @@ class Post(db.Model):
         self.title = kwargs.get('title')
         self.description = kwargs.get('description', '')
         self.seller = kwargs.get('seller')
-        self.image = kwargs.get('image')
         self.price = kwargs.get('price')
     
     def serialize(self):
@@ -113,7 +117,7 @@ class Post(db.Model):
             'price': self.price,
             'seller': self.seller,
             'buyer': self.buyer,
-            'image': self.image,
+            'image': self.image.serialize(),
             'comments': comments
         }
 
