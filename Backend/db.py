@@ -3,7 +3,7 @@ from flask_login import UserMixin
 import base64
 import boto3
 import datetime
-from io import BytesIOI
+from io import BytesIO
 from mimetypes import guess_extension, guess_type
 import os
 from PIL import Image
@@ -18,22 +18,35 @@ BASE_DIR = os.getcwd()
 S3_BUCKET = "cornellebay"
 S3_BASE_URL = f"https://{S3_BUCKET}.s3-us-east-2.amazonaws.com"
 
-class Asset(db.Model):
-    __tablename__ = "image"
+association_post_interested = db.Table(
+    'association_post_interested', 
+    db.Model.metadata,
+    db.Column('post_id', db.Integer, db.ForeignKey('post.id')),
+    db.Column('user_id', db.Integer, db.ForeignKey('user.id'))
+)
 
-    id = db.Column(id.Integer, primary_key=True)
+class Post(db.Model):
+    __tablename__ = 'post'
+    id = db.Column(db.Integer, primary_key = True)
+    active = db.Column(db.Boolean, nullable=True)
+    price = db.Column(db.String, nullable=False)
     base_url = db.Column(db.String, nullable=False)
     salt = db.Column(db.String, nullable=False)
     extension = db.Column(db.String, nullable=False)
-    post_id = db.Column(db.Integer, db.ForeignKey('post.id'), unique=True)
+    title = db.Column(db.String, nullable=False)
+    description = db.Column(db.String, nullable=True)
+    buyer = db.Column(db.String, db.ForeignKey('user.id'))  
+    seller = db.Column(db.String, db.ForeignKey('user.id'), nullable=False)  
+    interested = db.relationship('User', secondary=association_post_interested, back_populates='interested_posts')
+    comments = db.relationship('Comment', cascade='delete')
 
     def __init__(self, **kwargs):
-        self.create(kwargs.get("image_data"))
-
-    def serialize(self):
-        return{
-            "url": f"{self.base_url}/{self.salt}.{self.extension}"
-        }
+        self.active = True
+        self.title = kwargs.get('title')
+        self.description = kwargs.get('description', '')
+        self.seller = kwargs.get('seller')
+        self.price = kwargs.get('price')
+        self.create(kwargs.get('image_data'))
 
     def create(self, image_data):
         try:
@@ -48,7 +61,7 @@ class Asset(db.Model):
             )
             img_str = re.sub("^data:image/.+;base64,", "", image_data)
             img_data = base64.b64decode(img_str)
-            img = Image.open(BytesIOI(img_data))
+            img = Image.open(BytesIO(img_data))
             self.base_url = S3_BASE_URL
             self.salt = salt
             self.extension = ext
@@ -69,38 +82,6 @@ class Asset(db.Model):
             os.remove(img_temploc)
         except Exception as e:
             print(f"Unable to create image due to {e}")
-
-
-
-association_post_interested = db.Table(
-    'association_post_interested', 
-    db.Model.metadata,
-    db.Column('post_id', db.Integer, db.ForeignKey('post.id')),
-    db.Column('user_id', db.Integer, db.ForeignKey('user.id'))
-)
-
-class Post(db.Model):
-    __tablename__ = 'post'
-    id = db.Column(db.Integer, primary_key = True)
-    active = db.Column(db.Boolean, nullable=True)
-    price = db.Column(db.String, nullable=False)
-
-    image = db.relationship('Asset', backref='post', uselist=False)
-
-
-    title = db.Column(db.String, nullable=False)
-    description = db.Column(db.String, nullable=True)
-    buyer = db.Column(db.String, db.ForeignKey('user.id'))  
-    seller = db.Column(db.String, db.ForeignKey('user.id'), nullable=False)  
-    interested = db.relationship('User', secondary=association_post_interested, back_populates='interested_posts')
-    comments = db.relationship('Comment', cascade='delete')
-
-    def __init__(self, **kwargs):
-        self.active = True
-        self.title = kwargs.get('title')
-        self.description = kwargs.get('description', '')
-        self.seller = kwargs.get('seller')
-        self.price = kwargs.get('price')
     
     def serialize(self):
         comments = []
@@ -117,9 +98,10 @@ class Post(db.Model):
             'price': self.price,
             'seller': self.seller,
             'buyer': self.buyer,
-            'image': self.image.serialize(),
+            'image': f"{self.base_url}/{self.salt}.{self.extension}",
             'comments': comments
         }
+
 
 class User(db.Model, UserMixin):
     __tablename__='user'
@@ -164,6 +146,7 @@ class User(db.Model, UserMixin):
             'bought': bought
         }
 
+
 class Comment(db.Model):
     __tablename__='comment'
     id = db.Column(db.Integer, primary_key = True)
@@ -182,6 +165,7 @@ class Comment(db.Model):
             'sender': self.sender,
             'content': self.content,
         }
+
 
 
 

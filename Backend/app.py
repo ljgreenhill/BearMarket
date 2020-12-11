@@ -1,7 +1,7 @@
 import json
 import os
 from db import db
-from db import User, Post, Comment, Asset
+from db import User, Post, Comment
 from flask import Flask, redirect, request, url_for, Request
 from oauthlib.oauth2 import WebApplicationClient
 import requests
@@ -179,11 +179,7 @@ def create_post():
         return failure_response('No price provided')
     if not logged_in(current_user):
         return failure_response('User not logged in')
-    image_data = body.get('image_data')
-    if image_data:
-        asset = Asset(image_data=image_data)
-        db.session.add(asset)
-    new_post = Post(title=body.get('title'), description=body.get('description'), seller=current_user.id, price=body.get('price'), image=body.get('image'))
+    new_post = Post(title=body.get('title'), description=body.get('description'), seller=current_user.id, price=body.get('price'), image_data=body.get("image_data"))
     db.session.add(new_post)
     db.session.commit()
     return success_response(new_post.serialize(), 201)
