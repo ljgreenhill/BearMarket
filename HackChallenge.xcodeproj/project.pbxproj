@@ -3,13 +3,14 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		7D21EBDE257F07910051461F /* FilterTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D21EBDD257F07910051461F /* FilterTableViewCell.swift */; };
 		7D21EBE1257F083E0051461F /* MePageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D21EBE0257F083E0051461F /* MePageViewController.swift */; };
 		AB3D33662580623400A38260 /* MainViewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB3D33652580623400A38260 /* MainViewViewController.swift */; };
+		AB7580592584C71400862127 /* credentials.plist in Resources */ = {isa = PBXBuildFile; fileRef = AB7580582584C71300862127 /* credentials.plist */; };
 		ABAB4C8D256F24C200C3C7B8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAB4C8C256F24C200C3C7B8 /* AppDelegate.swift */; };
 		ABAB4C8F256F24C200C3C7B8 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAB4C8E256F24C200C3C7B8 /* SceneDelegate.swift */; };
 		ABAB4C91256F24C200C3C7B8 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAB4C90256F24C200C3C7B8 /* ViewController.swift */; };
@@ -17,12 +18,15 @@
 		ABAB4C99256F24C400C3C7B8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = ABAB4C97256F24C400C3C7B8 /* LaunchScreen.storyboard */; };
 		ABAB4CAF2575921000C3C7B8 /* ItemCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAB4CAE2575921000C3C7B8 /* ItemCollectionViewCell.swift */; };
 		ABAB4CB22575A00900C3C7B8 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAB4CB12575A00900C3C7B8 /* Item.swift */; };
+		D3C8A256D7DBDEF1EDD8CF14 /* Pods_HackChallenge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C47C2521D8251672FFDDDB90 /* Pods_HackChallenge.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		7D21EBDD257F07910051461F /* FilterTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterTableViewCell.swift; sourceTree = "<group>"; };
 		7D21EBE0257F083E0051461F /* MePageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MePageViewController.swift; sourceTree = "<group>"; };
+		8456B986CD75B16179BA61AD /* Pods-HackChallenge.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HackChallenge.debug.xcconfig"; path = "Target Support Files/Pods-HackChallenge/Pods-HackChallenge.debug.xcconfig"; sourceTree = "<group>"; };
 		AB3D33652580623400A38260 /* MainViewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewViewController.swift; sourceTree = "<group>"; };
+		AB7580582584C71300862127 /* credentials.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = credentials.plist; sourceTree = "<group>"; };
 		ABAB4C89256F24C200C3C7B8 /* HackChallenge.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HackChallenge.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ABAB4C8C256F24C200C3C7B8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		ABAB4C8E256F24C200C3C7B8 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -32,6 +36,8 @@
 		ABAB4C9A256F24C400C3C7B8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		ABAB4CAE2575921000C3C7B8 /* ItemCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemCollectionViewCell.swift; sourceTree = "<group>"; };
 		ABAB4CB12575A00900C3C7B8 /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
+		C47C2521D8251672FFDDDB90 /* Pods_HackChallenge.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_HackChallenge.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D7EF7E98FD61198ACECFE459 /* Pods-HackChallenge.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HackChallenge.release.xcconfig"; path = "Target Support Files/Pods-HackChallenge/Pods-HackChallenge.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -39,6 +45,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D3C8A256D7DBDEF1EDD8CF14 /* Pods_HackChallenge.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -51,6 +58,8 @@
 				AB3D33652580623400A38260 /* MainViewViewController.swift */,
 				ABAB4C8B256F24C200C3C7B8 /* HackChallenge */,
 				ABAB4C8A256F24C200C3C7B8 /* Products */,
+				C41F998050A3A3B493320FB5 /* Pods */,
+				E9C081D743BA1C696881A735 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -75,8 +84,26 @@
 				ABAB4C95256F24C400C3C7B8 /* Assets.xcassets */,
 				ABAB4C97256F24C400C3C7B8 /* LaunchScreen.storyboard */,
 				ABAB4C9A256F24C400C3C7B8 /* Info.plist */,
+				AB7580582584C71300862127 /* credentials.plist */,
 			);
 			path = HackChallenge;
+			sourceTree = "<group>";
+		};
+		C41F998050A3A3B493320FB5 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				8456B986CD75B16179BA61AD /* Pods-HackChallenge.debug.xcconfig */,
+				D7EF7E98FD61198ACECFE459 /* Pods-HackChallenge.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		E9C081D743BA1C696881A735 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				C47C2521D8251672FFDDDB90 /* Pods_HackChallenge.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -86,9 +113,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = ABAB4C9D256F24C400C3C7B8 /* Build configuration list for PBXNativeTarget "HackChallenge" */;
 			buildPhases = (
+				940D05E7C59868007143CB5F /* [CP] Check Pods Manifest.lock */,
 				ABAB4C85256F24C200C3C7B8 /* Sources */,
 				ABAB4C86256F24C200C3C7B8 /* Frameworks */,
 				ABAB4C87256F24C200C3C7B8 /* Resources */,
+				2CB29685E2282BDDF17E2808 /* [CP] Embed Pods Frameworks */,
+				219C02D6BDED0CD33A720F2D /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -137,11 +167,71 @@
 			buildActionMask = 2147483647;
 			files = (
 				ABAB4C99256F24C400C3C7B8 /* LaunchScreen.storyboard in Resources */,
+				AB7580592584C71400862127 /* credentials.plist in Resources */,
 				ABAB4C96256F24C400C3C7B8 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		219C02D6BDED0CD33A720F2D /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-HackChallenge/Pods-HackChallenge-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-HackChallenge/Pods-HackChallenge-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-HackChallenge/Pods-HackChallenge-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		2CB29685E2282BDDF17E2808 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-HackChallenge/Pods-HackChallenge-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-HackChallenge/Pods-HackChallenge-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-HackChallenge/Pods-HackChallenge-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		940D05E7C59868007143CB5F /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-HackChallenge-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		ABAB4C85256F24C200C3C7B8 /* Sources */ = {
@@ -291,6 +381,7 @@
 		};
 		ABAB4C9E256F24C400C3C7B8 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8456B986CD75B16179BA61AD /* Pods-HackChallenge.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -309,6 +400,7 @@
 		};
 		ABAB4C9F256F24C400C3C7B8 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D7EF7E98FD61198ACECFE459 /* Pods-HackChallenge.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
