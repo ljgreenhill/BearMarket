@@ -8,4 +8,6 @@ target 'HackChallenge' do
   # Pods for HackChallenge
     pod 'Alamofire'
     pod 'GoogleSignIn'
-end
+    pod 'Kingfisher'
+    pod 'ImagePicker'
+ end
