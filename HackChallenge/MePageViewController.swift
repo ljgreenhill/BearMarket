@@ -23,6 +23,7 @@ class MePageViewController: UIViewController {
     let tabHeight: CGFloat = 40
     
     var tags: [UIImageView]! //delete later
+    
     //delete later
     let item1 = Item(itemImage: "item1", itemName: "First Item", userImage: "user1", userName: "First User", price: "34.99")
     let item2 = Item(itemImage: "item2", itemName: "Second Item", userImage: "user2", userName: "Second User", price: "20.00")
@@ -35,10 +36,19 @@ class MePageViewController: UIViewController {
         navigationController?.navigationBar.barTintColor = UIColor(red: 225/255, green: 225/255, blue: 225/255, alpha: 1)
         view.backgroundColor = .white
         
+        var sellingTag = UIImageView()
+        var interestedTag = UIImageView()
+        var boughtTag = UIImageView()
+        
         items = [item1, item2, item1, item2, item1, item2]
         
         //Profile
         profileView = UIView()
+        profileView.layer.cornerRadius = 20
+        profileView.layer.backgroundColor = UIColor.white.cgColor
+        profileView.clipsToBounds = true
+        profileView.layer.masksToBounds = true
+        profileView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(profileView)
         
         userName = UILabel()
@@ -102,23 +112,23 @@ class MePageViewController: UIViewController {
 
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            profileView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 30),
+            profileView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
             profileView.heightAnchor.constraint(equalToConstant: 200),
             profileView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             profileView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
         
         NSLayoutConstraint.activate([
-            userName.topAnchor.constraint(equalTo: profileView.safeAreaLayoutGuide.topAnchor, constant: 30),
-            userName.heightAnchor.constraint(equalToConstant: 30),
+            userName.topAnchor.constraint(equalTo: profileView.safeAreaLayoutGuide.topAnchor, constant: 5),
+            userName.heightAnchor.constraint(equalToConstant: 25),
             userName.leadingAnchor.constraint(equalTo: profileView.leadingAnchor),
             userName.trailingAnchor.constraint(equalTo: profileView.trailingAnchor),
             userName.centerXAnchor.constraint(equalTo: profileView.centerXAnchor)
         ])
         
         NSLayoutConstraint.activate([
-            profilePic.topAnchor.constraint(equalTo: userName.bottomAnchor, constant: 30),
-            profilePic.heightAnchor.constraint(equalToConstant: 60),
+            profilePic.topAnchor.constraint(equalTo: userName.bottomAnchor, constant: 5),
+            profilePic.heightAnchor.constraint(equalToConstant: 50),
             profilePic.leadingAnchor.constraint(equalTo: profileView.leadingAnchor),
             profilePic.trailingAnchor.constraint(equalTo: profileView.trailingAnchor),
             profilePic.centerXAnchor.constraint(equalTo: profileView.centerXAnchor)
