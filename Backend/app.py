@@ -228,7 +228,7 @@ def comment_on_item(post_id):
     if post.active != None and post.active != True:
         return failure_response('Item inactive')
     body = json.loads(request.data)
-    if(body.get('content') is None):
+    if body.get('content') is None:
         return failure_response('No message provided')
     if not logged_in(current_user):
         return failure_response('User not logged in')

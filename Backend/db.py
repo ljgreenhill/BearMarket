@@ -156,7 +156,7 @@ class Comment(db.Model):
 
     def __init__(self, **kwargs):
         self.sender = kwargs.get('sender')
-        self.content = kwargs.get('image')
+        self.content = kwargs.get('content')
         self.post = kwargs.get('post')
 
     def serialize(self):
