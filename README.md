@@ -1,3 +1,16 @@
-API: https://documenter.getpostman.com/view/12799752/TVmV5DRu
-
-Link: https://bear-market.herokuapp.com/
+## Backend Description
+- Google login using OAuth 2.0
+  - Allows app to use LoginManager to get the current user
+  - Frontend does not have to pass in who the current user is
+- Images 
+  - Frontend passes Base64 string when created post
+  - Images are stored using AWS
+- Uses Heroku Automated Certificate Management
+- Database models used:
+  - Many to many
+    - Interested users to posts
+  - One to many 
+    - Seller to post 
+    - Buyer to post
+- API: https://documenter.getpostman.com/view/12799752/TVmV5DRu
+- Link: https://bear-market.herokuapp.com/
