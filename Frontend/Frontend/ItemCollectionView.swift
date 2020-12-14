@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 class ItemCollectionViewCell: UICollectionViewCell {
     
@@ -117,12 +118,18 @@ class ItemCollectionViewCell: UICollectionViewCell {
             userImageView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
         ])
     }
-    func configure(item: Item) {
-        itemImageView.image = UIImage(named: item.itemImage)
-        itemNameLabel.text = item.itemName
-        userImageView.image = UIImage(named: item.userImage)
-        userNameLabel.text = item.userName
-        priceLabel.text = "$" + item.price
+    func configureItem(item: PostDataResponse) {
+        let photoURL = URL(string: item.image)
+        itemImageView.kf.setImage(with: photoURL)
+        itemNameLabel.text = item.title
+//        userImageView.image = UIImage(named: item.userImage)
+//        userNameLabel.text = item.userName
+        priceLabel.text = item.price
+    }
+    
+    func configureUser(user: UserDataResponse) {
+        
+        
     }
 }
 

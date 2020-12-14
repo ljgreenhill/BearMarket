@@ -101,7 +101,7 @@ class MePageViewController: UIViewController {
         itemCollectionView.backgroundColor = .white
         itemCollectionView.translatesAutoresizingMaskIntoConstraints = false
         itemCollectionView.register(ItemCollectionViewCell.self, forCellWithReuseIdentifier: itemCellReuseIdentifier)
-        itemCollectionView.dataSource = self
+//        itemCollectionView.dataSource = self
         itemCollectionView.delegate = self
         view.addSubview(itemCollectionView)
         
@@ -164,14 +164,14 @@ class MePageViewController: UIViewController {
     }*/
     
     //get info for current user
-    private func getCurrentUserInfo() {
-        NetworkManager.getCurrentUser{ user in
-            self.user = user
-        }
-        DispatchQueue.main.async {
-            self.reloadData()
-        }
-    }
+//    private func getCurrentUserInfo() {
+//        NetworkManager.getCurrentUser{ user in
+//            self.user = user
+//        }
+//        DispatchQueue.main.async {
+//            self.reloadData()
+//        }
+//    }
     
     //get posts
     private func getPosts() {
@@ -181,20 +181,20 @@ class MePageViewController: UIViewController {
 
 }
 
-extension MePageViewController: UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return items.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemCellReuseIdentifier, for: indexPath) as! ItemCollectionViewCell
-        cell.configure(item: items[indexPath.row])
-        return cell
-    }
-    
-    
-    
-}
+//extension MePageViewController: UICollectionViewDataSource {
+//    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+//        return items.count
+//    }
+//
+//    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+//        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemCellReuseIdentifier, for: indexPath) as! ItemCollectionViewCell
+//        cell.configure(item: items[indexPath.row])
+//        return cell
+//    }
+//
+//
+//
+//}
 
 extension MePageViewController: UICollectionViewDelegateFlowLayout {
     
