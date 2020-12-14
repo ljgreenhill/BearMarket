@@ -9,46 +9,46 @@ import UIKit
 
 class FilterTableViewCell: UITableViewCell {
 
-    var containerView : UIView!
-    var filter : UIImageView!
+    var name : UILabel!
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        containerView = UIView()
-        //add a little more
-        containerView.translatesAutoresizingMaskIntoConstraints = false
-        contentView.addSubview(containerView)
-        
-        //set up to accept an image from the assets
-        filter = UIImageView()
-        //more
-        filter.translatesAutoresizingMaskIntoConstraints = false
-        containerView.addSubview(filter)
+        name = UILabel()
+        name.translatesAutoresizingMaskIntoConstraints = false
+        name.font = UIFont.systemFont(ofSize: 15)
+        name.textAlignment = .center
+        name.textColor = .red
+        contentView.addSubview(name)
         
         setupConstraints()
+    }
+    func setupConstraints() {
+        NSLayoutConstraint.activate([
+            name.topAnchor.constraint(equalTo: contentView.topAnchor),
+            name.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            name.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            name.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            name.centerXAnchor.constraint(equalTo: contentView.centerXAnchor)
+        ])
+    }
+    override var isSelected: Bool {
+        didSet{
+            if self.isSelected{
+                self.backgroundColor = .red
+                name.textColor = .white
+            } else {
+                self.backgroundColor = .white
+                name.textColor = .red
+            }
+        }
+    }
+    
+    func configure(tag: Tag) {
+        name.text = tag.name
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    
-    private func setupConstraints() {
-        
-        NSLayoutConstraint.activate([
-            containerView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 5),
-            containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
-            containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
-            containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -5)
-        ])
-        
-        NSLayoutConstraint.activate([
-            filter.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 5),
-            filter.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 10),
-            filter.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -10),
-            filter.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -5)
-        ])
-        
     }
 }

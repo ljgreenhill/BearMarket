@@ -22,12 +22,14 @@ class MePageViewController: UIViewController {
     let padding: CGFloat = 8
     let tabHeight: CGFloat = 40
     
-    var tags: [UIImageView]! //delete later
+    var profile: UserDataResponse!
+    let sellTag = Tag(name: "Selling")
+    let interestTag = Tag(name: "Interested")
+    let buyTag = Tag(name: "Bought")
+    var tags: [Tag]!
     
-    //delete later
-    let item1 = Item(itemImage: "item1", itemName: "First Item", userImage: "user1", userName: "First User", price: "34.99")
-    let item2 = Item(itemImage: "item2", itemName: "Second Item", userImage: "user2", userName: "Second User", price: "20.00")
-    var items: [Item] = []
+    
+    private var items: [PostDataResponse] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,11 +38,8 @@ class MePageViewController: UIViewController {
         navigationController?.navigationBar.barTintColor = UIColor(red: 225/255, green: 225/255, blue: 225/255, alpha: 1)
         view.backgroundColor = .white
         
-        var sellingTag = UIImageView()
-        var interestedTag = UIImageView()
-        var boughtTag = UIImageView()
+        tags = [sellTag, interestTag, buyTag]
         
-        items = [item1, item2, item1, item2, item1, item2]
         
         //Profile
         profileView = UIView()
@@ -83,8 +82,8 @@ class MePageViewController: UIViewController {
         
         //Posts Collection View
         /**itemCollectionView = UICollectionView()
-        itemCollectionView.delegate = self
-        itemCollectionView.dataSource = self
+         itemCollectionView.delegate = self
+         itemCollectionView.dataSource = self
         itemCollectionView.translatesAutoresizingMaskIntoConstraints = false
         itemCollectionView.separatorStyle = .none
         itemCollectionView.backgroundColor = UIColor(red: 239/255, green: 239/255, blue: 239/255, alpha: 1)
@@ -97,7 +96,9 @@ class MePageViewController: UIViewController {
         postsLayout.minimumLineSpacing = padding
         postsLayout.scrollDirection = .vertical
         
+        
         itemCollectionView = UICollectionView(frame: .zero, collectionViewLayout: postsLayout)
+        itemCollectionView.dataSource = self
         itemCollectionView.backgroundColor = .white
         itemCollectionView.translatesAutoresizingMaskIntoConstraints = false
         itemCollectionView.register(ItemCollectionViewCell.self, forCellWithReuseIdentifier: itemCellReuseIdentifier)
@@ -105,7 +106,8 @@ class MePageViewController: UIViewController {
         itemCollectionView.delegate = self
         view.addSubview(itemCollectionView)
         
-        
+        getCurrentUser()
+        getItems()
         setupConstraints()
     }
 
@@ -157,51 +159,69 @@ class MePageViewController: UIViewController {
         ])
     }
     
-    /**@objc func presentItemViewController() {
-        let vc = itemViewController(delegate: self, titleString: ???idkWhatItIsCalled??.titleLabel?.text)
+    /*@objc func presentPostViewController() {
+        let vc = itemViewController(delegate: self, titleString: itemCollectionView.cellForItem(at: <#T##IndexPath#>).titleLabel?.text)
         vc.delegate = self
         navigationController?.pushViewController(vc, animated: true)
     }*/
     
     //get info for current user
-//    private func getCurrentUserInfo() {
-//        NetworkManager.getCurrentUser{ user in
-//            self.user = user
-//        }
-//        DispatchQueue.main.async {
-//            self.reloadData()
-//        }
-//    }
-    
-    //get posts
-    private func getPosts() {
-        
+    private func getCurrentUser() {
+        NetworkManager.getCurrentUser{ user in
+            self.profile = user
+        }
+        DispatchQueue.main.async {
+            self.itemCollectionView.reloadData()
+        }
     }
     
 
+
+    func getItems() {
+        
+        NetworkManager.getItems { items in
+            self.items = items
+            
+            DispatchQueue.main.async{
+                self.itemCollectionView.reloadData()
+            }
+        }
+    }
+
+//    func getUsers() {
+//        NetworkManager.getUserByID(id: items[].seller, completion: <#T##(UserDataResponse) -> Void#>)
+//
+//    }
 }
 
-//extension MePageViewController: UICollectionViewDataSource {
-//    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-//        return items.count
-//    }
-//
-//    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-//        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemCellReuseIdentifier, for: indexPath) as! ItemCollectionViewCell
-//        cell.configure(item: items[indexPath.row])
-//        return cell
-//    }
-//
-//
-//
-//}
+extension MePageViewController: UICollectionViewDataSource {
+func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    return items.count
+}
+
+func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemCellReuseIdentifier, for: indexPath) as! ItemCollectionViewCell
+    let item = items[indexPath.row]
+    cell.configureItem(item: item)
+    return cell
+}
+}
+
 
 extension MePageViewController: UICollectionViewDelegateFlowLayout {
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let size = (collectionView.frame.width)/2
-        return CGSize(width: size, height: 1.5 * size)
-    }
-    
+
+func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+    let size = (collectionView.frame.width)/2
+    return CGSize(width: size, height: 1.5 * size)
 }
 
+}
+
+extension MePageViewController: UICollectionViewDelegate {
+
+func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    let item = items[indexPath.row]
+    let postViewController = PostViewController(post: item)
+    navigationController?.pushViewController(postViewController, animated: true)
+}
+}
