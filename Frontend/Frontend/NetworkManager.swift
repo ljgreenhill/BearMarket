@@ -150,13 +150,28 @@ class NetworkManager {
     
     
     //get logged in user
-    
+    static func getCurrentUser(completion: @escaping (User) -> Void) {
+        let endpoint = "\(host)/users/current/"
+        AF.request((endpoint), method: .get).validate().responseData {
+            response in
+            switch response.result {
+            case .success(let data):
+                let jsonDecoder = JSONDecoder()
+                jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
+                if let user = try? jsonDecoder.decode(User.self, from: data)
+                {
+                    let userGet = user.data
+                    completion(userGet)
+                }
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
+    }
+
     
     //get user by id
-    static func getUserByID(id: String, completion: @escaping (Item) -> Void) {
-        let parameters: [String: Any] = [
-            "userId": id
-        ]
+    static func getUserByID(id: String, completion: @escaping (User) -> Void) {
         let endpoint = "\(host)/users/"
         AF.request("\(endpoint)\(id)/", method: .get).validate().responseData {
             response in

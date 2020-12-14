@@ -162,6 +162,22 @@ class MePageViewController: UIViewController {
         vc.delegate = self
         navigationController?.pushViewController(vc, animated: true)
     }*/
+    
+    //get info for current user
+    private func getCurrentUserInfo() {
+        NetworkManager.getCurrentUser{ user in
+            self.user = user
+        }
+        DispatchQueue.main.async {
+            self.reloadData()
+        }
+    }
+    
+    //get posts
+    private func getPosts() {
+        
+    }
+    
 
 }
 
@@ -175,6 +191,9 @@ extension MePageViewController: UICollectionViewDataSource {
         cell.configure(item: items[indexPath.row])
         return cell
     }
+    
+    
+    
 }
 
 extension MePageViewController: UICollectionViewDelegateFlowLayout {
