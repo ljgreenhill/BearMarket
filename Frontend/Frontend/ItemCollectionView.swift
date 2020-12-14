@@ -34,7 +34,7 @@ class ItemCollectionViewCell: UICollectionViewCell {
         itemImageView.translatesAutoresizingMaskIntoConstraints = false
         itemImageView.clipsToBounds = true
         itemImageView.layer.masksToBounds = true
-        itemImageView.contentMode = .scaleAspectFill
+        itemImageView.contentMode = .scaleAspectFit
         containerView.addSubview(itemImageView)
         
         priceLabel.backgroundColor = .gray
@@ -118,7 +118,7 @@ class ItemCollectionViewCell: UICollectionViewCell {
             userImageView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
         ])
     }
-    func configureItem(item: PostDataResponse) {
+    func configure(item: PostDataResponse) {
         let photoURL = URL(string: item.image)
         itemImageView.kf.setImage(with: photoURL)
         itemNameLabel.text = item.title

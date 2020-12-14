@@ -117,7 +117,7 @@ extension HomePageViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemReuseIdentifier, for: indexPath) as! ItemCollectionViewCell
         let item = items[indexPath.row]
-        cell.configureItem(item: item)
+        cell.configure(item: item)
         return cell
     }
 }

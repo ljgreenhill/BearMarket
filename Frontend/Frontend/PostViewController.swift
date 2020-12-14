@@ -76,38 +76,38 @@ class PostViewController: UIViewController {
     
     func setupConstraints() {
         NSLayoutConstraint.activate([
-            userImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
-            userImageView.widthAnchor.constraint(equalToConstant:38),
-            userImageView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 20),
-            userImageView.heightAnchor.constraint(equalToConstant:38)
+            userImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
+            userImageView.widthAnchor.constraint(equalToConstant:35),
+            userImageView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 13),
+            userImageView.heightAnchor.constraint(equalToConstant:35)
         ])
         
         NSLayoutConstraint.activate([
-            userNameLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
-            userNameLabel.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor),
-            userNameLabel.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 77),
-            userNameLabel.heightAnchor.constraint(equalToConstant:38)
+            userNameLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
+            userNameLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            userNameLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 70),
+            userNameLabel.heightAnchor.constraint(equalToConstant:35)
         ])
         
         NSLayoutConstraint.activate([
-            postImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 70),
-            postImageView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor),
-            postImageView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor),
-            postImageView.bottomAnchor.constraint(equalTo:view.safeAreaLayoutGuide.bottomAnchor, constant: -175)
+            postImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 50),
+            postImageView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            postImageView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            postImageView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -120)
         ])
         
         NSLayoutConstraint.activate([
             postNameLabel.topAnchor.constraint(equalTo: postImageView.bottomAnchor, constant: 10),
-            postNameLabel.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -7),
-            postNameLabel.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor,constant: 7),
+            postNameLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -7),
+            postNameLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor,constant: 7),
             postNameLabel.heightAnchor.constraint(equalToConstant: 17),
-            postNameLabel.bottomAnchor.constraint(equalTo:view.safeAreaLayoutGuide.bottomAnchor, constant: -147)
+            postNameLabel.bottomAnchor.constraint(equalTo:view.safeAreaLayoutGuide.bottomAnchor, constant: -95)
         ])
         
         NSLayoutConstraint.activate([
             postDescription.topAnchor.constraint(equalTo: postNameLabel.bottomAnchor),
-            postDescription.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -3),
-            postDescription.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor,constant: 3),
+            postDescription.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -3),
+            postDescription.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor,constant: 3),
             postDescription.heightAnchor.constraint(equalToConstant: 100)
         ])
 
