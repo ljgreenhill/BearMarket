@@ -19,6 +19,7 @@ class HomePageViewController: UIViewController {
 //    let item1 = Item(itemImage: "item1", itemName: "First Item", userImage: "user1", userName: "First User", price: "34.99")
 //    let item2 = Item(itemImage: "item2", itemName: "Second Item", userImage: "user2", userName: "Second User", price: "20.00")
     var items: [PostDataResponse] = []
+    //var users: [UserDataResponse] = []
 
 
     override func viewDidLoad() {
@@ -96,7 +97,11 @@ class HomePageViewController: UIViewController {
         
         NetworkManager.getItems { items in
             self.items = items
-            
+//            for x in 0..<self.items.count {
+//                NetworkManager.getUserByID(id: self.items[x].seller) { user in
+//                    self.users.append(user)
+//                }
+//            }
             DispatchQueue.main.async{
                 self.itemCollectionView.reloadData()
             }
@@ -104,7 +109,7 @@ class HomePageViewController: UIViewController {
     }
     
 //    func getUsers() {
-//        NetworkManager.getUserByID(id: items[].seller, completion: <#T##(UserDataResponse) -> Void#>)
+//        NetworkManager.getUserByID(id: , completion: <#T##(UserDataResponse) -> Void#>)
 //
 //    }
 }
@@ -117,6 +122,7 @@ extension HomePageViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemReuseIdentifier, for: indexPath) as! ItemCollectionViewCell
         let item = items[indexPath.row]
+       // let user = users[indexPath.row]
         cell.configure(item: item)
         return cell
     }

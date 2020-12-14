@@ -16,6 +16,7 @@ class PostViewController: UIViewController {
     var postNameLabel = UILabel()
     var postDescription = UITextView()
     var starImageView = UIImageView()
+    var priceLabel = UILabel()
     
     init(post:PostDataResponse) {
         super.init(nibName: nil, bundle: nil)
@@ -31,6 +32,13 @@ class PostViewController: UIViewController {
         navigationController?.navigationBar.barTintColor = UIColor(red: 225/255, green: 225/255, blue: 225/255, alpha: 1)
         view.backgroundColor = UIColor(red: 240/255, green: 240/255, blue: 240/255, alpha: 1)
         title = "Post"
+        
+        
+        NetworkManager.getUserByID(id: post.seller) { user in
+            self.userNameLabel.text = user.name
+            let userPicURL = URL(string: user.profile_pic)
+            self.userImageView.kf.setImage(with: userPicURL)
+        }
         
         //userImageView.image = UIImage(named: "user2")
         userImageView.translatesAutoresizingMaskIntoConstraints = false
@@ -70,27 +78,42 @@ class PostViewController: UIViewController {
         postDescription.font = .systemFont(ofSize: 11)
         view.addSubview(postDescription)
         
+        starImageView.image = UIImage(named: "Star1")
+        starImageView.translatesAutoresizingMaskIntoConstraints = false
+        starImageView.clipsToBounds = true
+        starImageView.layer.masksToBounds = true
+        starImageView.contentMode = .scaleAspectFill
+        view.addSubview(starImageView)
+        
+        priceLabel.text = post.price
+        priceLabel.backgroundColor = .gray
+        priceLabel.textColor = .white
+        priceLabel.translatesAutoresizingMaskIntoConstraints = false
+        priceLabel.font = .boldSystemFont(ofSize: 15)
+        priceLabel.textAlignment = .center
+        view.addSubview(priceLabel)
+        
         setupConstraints()
         // Do any additional setup after loading the view.
     }
     
     func setupConstraints() {
         NSLayoutConstraint.activate([
-            userImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
+            userImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 9),
             userImageView.widthAnchor.constraint(equalToConstant:35),
             userImageView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 13),
             userImageView.heightAnchor.constraint(equalToConstant:35)
         ])
         
         NSLayoutConstraint.activate([
-            userNameLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
+            userNameLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 9),
             userNameLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            userNameLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 70),
+            userNameLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 65),
             userNameLabel.heightAnchor.constraint(equalToConstant:35)
         ])
         
         NSLayoutConstraint.activate([
-            postImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 50),
+            postImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 51),
             postImageView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
             postImageView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             postImageView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -120)
@@ -110,7 +133,21 @@ class PostViewController: UIViewController {
             postDescription.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor,constant: 3),
             postDescription.heightAnchor.constraint(equalToConstant: 100)
         ])
-
+        
+        NSLayoutConstraint.activate([
+            starImageView.topAnchor.constraint(equalTo: postNameLabel.topAnchor, constant: -3),
+            starImageView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -3),
+            starImageView.widthAnchor.constraint(equalToConstant: 25),
+            //starImageView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor,constant: 280),
+            starImageView.heightAnchor.constraint(equalToConstant: 25)
+        ])
+        
+        NSLayoutConstraint.activate([
+            priceLabel.topAnchor.constraint(equalTo: postImageView.bottomAnchor, constant: -25),
+            priceLabel.trailingAnchor.constraint(equalTo: postImageView.trailingAnchor),
+            priceLabel.bottomAnchor.constraint(equalTo: postImageView.bottomAnchor),
+            priceLabel.leadingAnchor.constraint(equalTo: postImageView.leadingAnchor, constant:250)
+        ])
     }
     /*
     // MARK: - Navigation

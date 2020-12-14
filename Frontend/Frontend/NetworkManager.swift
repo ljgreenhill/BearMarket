@@ -79,28 +79,28 @@ class NetworkManager {
         }
     }
 
-    //post a comment on a post
-    static func newComment(comment: String, completion: @escaping (PostDataResponse) -> Void) {
-        let parameters: Parameters = [
-            //insert parts of comment here
-            "content" : comment
-        ]
-        let endpoint = "\(host)/posts/"
-        AF.request(endpoint, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: nil).validate().responseData { response in
-            switch response.result {
-            case .success(let data):
-                let jsonDecoder = JSONDecoder()
-
-                if let commentData = try? jsonDecoder.decode(CommentsResponse.self, from: data) {
-                    let comment = commentData.data
-                    completion(comment)
-                }
-
-            case .failure(let error):
-                print(error.localizedDescription)
-            }
-        }
-    }
+//    post a comment on a post
+//    static func newComment(comment: String, completion: @escaping (PostDataResponse) -> Void) {
+//        let parameters: Parameters = [
+//            //insert parts of comment here
+//            "content" : comment
+//        ]
+//        let endpoint = "\(host)/posts/"
+//        AF.request(endpoint, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: nil).validate().responseData { response in
+//            switch response.result {
+//            case .success(let data):
+//                let jsonDecoder = JSONDecoder()
+//
+//                if let commentData = try? jsonDecoder.decode(CommentsResponse.self, from: data) {
+//                    let comment = commentData.data
+//                    completion(comment)
+//                }
+//
+//            case .failure(let error):
+//                print(error.localizedDescription)
+//            }
+//        }
+//    }
 
     //delete a post //this is absolutely wrong
 //    static func deleteItem(id: Int, completion: @escaping (Item) -> Void) -> {
@@ -176,13 +176,13 @@ class NetworkManager {
     
     //get user by id
     static func getUserByID(id: String, completion: @escaping (UserDataResponse) -> Void) {
-        let endpoint = "\(host)/users/" + id
+        let endpoint = "\(host)users/" + id
         AF.request(endpoint, method: .get).validate().responseData {
             response in
             switch response.result {
             case .success(let data):
                 let jsonDecoder = JSONDecoder()
-                jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
+                //jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
                 if let user = try? jsonDecoder.decode(UserResponse.self, from: data)
                 {
                     let userGet = user.data

@@ -41,6 +41,7 @@ class ItemCollectionViewCell: UICollectionViewCell {
         priceLabel.textColor = .white
         priceLabel.translatesAutoresizingMaskIntoConstraints = false
         priceLabel.font = .boldSystemFont(ofSize: 11)
+        priceLabel.textAlignment = .center
         containerView.addSubview(priceLabel)
         
         itemNameLabel.textColor = .black
@@ -90,7 +91,7 @@ class ItemCollectionViewCell: UICollectionViewCell {
             //priceLabel.topAnchor.constraint(equalTo: itemNameLabel.topAnchor, constant: -30),
             priceLabel.heightAnchor.constraint(equalToConstant: 18),
             priceLabel.bottomAnchor.constraint(equalTo: itemImageView.bottomAnchor),
-            priceLabel.widthAnchor.constraint(equalToConstant: 40),
+            priceLabel.widthAnchor.constraint(equalToConstant: 46),
             //priceLabel.leadingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20),
             priceLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor)
         ])
@@ -122,14 +123,17 @@ class ItemCollectionViewCell: UICollectionViewCell {
         let photoURL = URL(string: item.image)
         itemImageView.kf.setImage(with: photoURL)
         itemNameLabel.text = item.title
-//        userImageView.image = UIImage(named: item.userImage)
-//        userNameLabel.text = item.userName
         priceLabel.text = item.price
-    }
-    
-    func configureUser(user: UserDataResponse) {
+//        self.userNameLabel.text = user.name
+//        let userPicURL = URL(string: user.profile_pic)
+//        self.userImageView.kf.setImage(with: userPicURL)
         
-        
+        let userID = item.seller
+        NetworkManager.getUserByID(id: userID) { user in
+            self.userNameLabel.text = user.name
+            let userPicURL = URL(string: user.profile_pic)
+            self.userImageView.kf.setImage(with: userPicURL)
+        }
     }
 }
 
