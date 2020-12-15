@@ -9,37 +9,56 @@ import UIKit
 
 class MePageViewController: UIViewController {
 
-    var tagTableView: UITableView!
-    var itemCollectionView: UICollectionView!
-    var userName: UILabel!
-    var email: UILabel!
-    var bio: UITextView!
-    var profilePic: UIImageView!
-    var addPostButton: UIButton!
-    var profileView: UIView!
+    private var profile: UserDataResponse!
+    private var tagTableView: UITableView!
+    private var itemCollectionView: UICollectionView!
+    private var userName: UILabel!
+    private var email: UILabel!
+    private var bio: UITextView!
+    private var profilePic: UIImageView!
+    private var addPostButton: UIButton!
+    private var profileView: UIView!
     
-    let itemCellReuseIdentifier = "itemCellReuseIdentifier"
-    let padding: CGFloat = 8
-    let tabHeight: CGFloat = 40
+    private let itemCellReuseIdentifier = "itemCellReuseIdentifier"
+    private let tagCellReuseIdentifier = "tagCellReuseIdentifier"
+    private let padding: CGFloat = 8
+    private let tabHeight: CGFloat = 40
     
-    var profile: UserDataResponse!
-    let sellTag = Tag(name: "Selling")
-    let interestTag = Tag(name: "Interested")
-    let buyTag = Tag(name: "Bought")
-    var tags: [Tag]!
-    
+    private let sellTag = Tag(name: "Selling")
+    private let interestTag = Tag(name: "Interested")
+    private let buyTag = Tag(name: "Bought")
+    private var tags: [Tag]!
     
     private var items: [PostDataResponse] = []
+    private var sellItems: [PostDataResponse] = []
+    private var buyItems: [PostDataResponse] = []
+    private var interestItems: [PostDataResponse] = []
+    
+    init(profile: UserDataResponse){
+        super.init(nibName: nil, bundle: nil)
+        self.profile = profile
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        title = "Profile"
+        title = "My Profile"
         navigationController?.navigationBar.barTintColor = UIColor(red: 225/255, green: 225/255, blue: 225/255, alpha: 1)
         view.backgroundColor = .white
         
         tags = [sellTag, interestTag, buyTag]
         
+        if let selling = profile.selling {
+            sellItems = selling
+        }
+        if let interested = profile.interested {
+            interestItems = interested
+        }
+        buyItems = profile.bought
         
         //Profile
         profileView = UIView()
@@ -51,20 +70,16 @@ class MePageViewController: UIViewController {
         view.addSubview(profileView)
         
         userName = UILabel()
-        userName.text = "Rachel"
+        userName.text = profile.name
         userName.translatesAutoresizingMaskIntoConstraints = false
         profileView.addSubview(userName)
         
         email = UILabel()
-        email.text = "rachel@mail.com"
+        email.text = profile.email
         email.translatesAutoresizingMaskIntoConstraints = false
         profileView.addSubview(email)
         
-        bio = UITextView()
-        bio.text = "this is me"
-        bio.translatesAutoresizingMaskIntoConstraints = false
-        profileView.addSubview(bio)
-        
+        let photoURL = URL(string: profile.profile_pic)
         profilePic = UIImageView()
         profilePic.translatesAutoresizingMaskIntoConstraints = false
         profileView.addSubview(profilePic)
@@ -195,18 +210,31 @@ class MePageViewController: UIViewController {
 }
 
 extension MePageViewController: UICollectionViewDataSource {
-func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-    return items.count
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return items.count
 }
 
-func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-    let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemCellReuseIdentifier, for: indexPath) as! ItemCollectionViewCell
-    let item = items[indexPath.row]
-    //cell.configureItem(item: PostDataResponse)
-    return cell
-}
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemCellReuseIdentifier, for: indexPath) as! ItemCollectionViewCell
+        let item = items[indexPath.row]
+        cell.configure(item: PostDataResponse)
+        return cell
+    }
 }
 
+extension MePageViewController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return tags.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tagTableView.dequeueReusableCell(withIdentifier: tagCellReuseIdentifier, for: indexPath) as! FilterTableViewCell
+        let tag = tags[indexPath.row]
+        cell.configure(tag: tag)
+        return cell
+    }
+    
+}
 
 extension MePageViewController: UICollectionViewDelegateFlowLayout {
 
