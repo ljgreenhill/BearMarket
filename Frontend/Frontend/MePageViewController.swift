@@ -9,7 +9,7 @@ import UIKit
 
 class MePageViewController: UIViewController {
 
-    private var profile: UserDataResponse!
+    
     private var tagTableView: UITableView!
     private var itemCollectionView: UICollectionView!
     private var userName: UILabel!
@@ -33,15 +33,8 @@ class MePageViewController: UIViewController {
     private var sellItems: [PostDataResponse] = []
     private var buyItems: [PostDataResponse] = []
     private var interestItems: [PostDataResponse] = []
+    private var profile: UserDataResponse!
     
-    init(profile: UserDataResponse){
-        super.init(nibName: nil, bundle: nil)
-        self.profile = profile
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -217,7 +210,7 @@ extension MePageViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemCellReuseIdentifier, for: indexPath) as! ItemCollectionViewCell
         let item = items[indexPath.row]
-        cell.configure(item: PostDataResponse)
+        cell.configure(item: item)
         return cell
     }
 }
