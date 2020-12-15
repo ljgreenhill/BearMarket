@@ -21,6 +21,7 @@
 - After login, must click "Done" in top left cornder to be led to a screen that prompts user to press button that enters into app
 - Uses Alamofire to Get and Post information on users and posts
 View Controllers:
+- Bar at bottom to navigate between Home, New Post, and Me pages
 - Home page
   - Post Collection View: 
     - Each cell is a post, and displays information on the item:
