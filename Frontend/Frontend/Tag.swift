@@ -6,9 +6,6 @@
 //
 
 import Foundation
-
 struct Tag {
-    
     var name: String
-    
 }
