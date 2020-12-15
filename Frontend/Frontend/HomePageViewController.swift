@@ -110,7 +110,7 @@ class HomePageViewController: UIViewController {
     }
     
 //    func getUsers() {
-//        NetworkManager.getUserByID(id: , completion: <#T##(UserDataResponse) -> Void#>)
+//        NetworkManager.getUserByID(id: , completion: )
 //
 //    }
 }

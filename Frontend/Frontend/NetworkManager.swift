@@ -20,7 +20,6 @@ class NetworkManager {
             switch response.result {
             case .success(let data):
                 let jsonDecoder = JSONDecoder()
-                jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
                 if let itemsData = try? jsonDecoder.decode(AllPostsResponse.self, from: data)
                 {
                     let items = itemsData.data
@@ -36,13 +35,13 @@ class NetworkManager {
     
     //get all active posts
     static func getActiveItems(completion: @escaping ([PostDataResponse]) -> Void) {
-        let endpoint = "\(host)/posts/active/"
+        let endpoint = "\(host)posts/active/"
         AF.request(endpoint, method: .get).validate().responseData {
             response in
             switch response.result {
             case .success(let data):
                 let jsonDecoder = JSONDecoder()
-                jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
+    
                 if let itemsData = try? jsonDecoder.decode(AllPostsResponse.self, from: data)
                 {
                     let activeItems = itemsData.data
@@ -62,7 +61,7 @@ class NetworkManager {
             "price": price,
             "image": image
         ]
-        let endpoint = "\(host)/posts/"
+        let endpoint = "\(host)posts/"
         AF.request(endpoint, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: nil).validate().responseData { response in
             switch response.result {
             case .success(let data):
@@ -132,7 +131,7 @@ class NetworkManager {
         let parameters: [String: Any] = [
             "id": itemId
         ]
-        let endpoint = "\(host)/posts/buy/"
+        let endpoint = "\(host)posts/buy/"
         AF.request("\(endpoint)\(itemId)/", method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: nil).validate().responseData { response in
             switch response.result {
             case .success(let data):
@@ -179,13 +178,13 @@ class NetworkManager {
     
     //get logged in user
     static func getCurrentUser(completion: @escaping (UserDataResponse) -> Void) {
-        let endpoint = "\(host)/users/current/"
+        let endpoint = "\(host)users/current/"
         AF.request((endpoint), method: .get).validate().responseData {
             response in
             switch response.result {
             case .success(let data):
                 let jsonDecoder = JSONDecoder()
-                jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
+                
                 if let user = try? jsonDecoder.decode(UserResponse.self, from: data)
                 {
                     let userGet = user.data
@@ -223,13 +222,13 @@ class NetworkManager {
         let parameters: [String: Any] = [
             "postId": id
         ]
-        let endpoint = "\(host)/posts/"
+        let endpoint = "\(host)posts/"
         AF.request("\(endpoint)\(id)/", method: .get).validate().responseData {
             response in
             switch response.result {
             case .success(let data):
                 let jsonDecoder = JSONDecoder()
-                jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
+            
                 if let item = try? jsonDecoder.decode(PostResponse.self, from: data) //may not be called ItemsDataResponse
                 {
                     let itemGet = item.data

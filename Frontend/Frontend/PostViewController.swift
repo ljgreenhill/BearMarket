@@ -18,6 +18,7 @@ class PostViewController: UIViewController {
     var postDescription = UITextView()
     var favoriteButton = UIButton()
     var priceLabel = UILabel()
+    var emailLabel = UILabel()
     
     init(post:PostDataResponse) {
         super.init(nibName: nil, bundle: nil)
@@ -39,6 +40,7 @@ class PostViewController: UIViewController {
             self.userNameLabel.text = user.name
             let userPicURL = URL(string: user.profile_pic)
             self.userImageView.kf.setImage(with: userPicURL)
+            self.emailLabel.text = "(" + user.email + ")"
         }
         
         //userImageView.image = UIImage(named: "user2")
@@ -52,7 +54,7 @@ class PostViewController: UIViewController {
         //userNameLabel.text = "User"
         userNameLabel.textColor = .black
         userNameLabel.translatesAutoresizingMaskIntoConstraints = false
-        userNameLabel.font = .boldSystemFont(ofSize: 18)
+        userNameLabel.font = .boldSystemFont(ofSize: 15)
         view.addSubview(userNameLabel)
         
         let photoURL = URL(string: post.image)
@@ -95,6 +97,11 @@ class PostViewController: UIViewController {
         priceLabel.textAlignment = .center
         view.addSubview(priceLabel)
         
+        emailLabel.textColor = .black
+        emailLabel.translatesAutoresizingMaskIntoConstraints = false
+        emailLabel.font = .systemFont(ofSize: 12)
+        view.addSubview(emailLabel)
+        
         setupConstraints()
         // Do any additional setup after loading the view.
     }
@@ -110,7 +117,7 @@ class PostViewController: UIViewController {
         NSLayoutConstraint.activate([
             userNameLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 9),
             userNameLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            userNameLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 65),
+            userNameLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 60),
             userNameLabel.heightAnchor.constraint(equalToConstant:35)
         ])
         
@@ -150,6 +157,13 @@ class PostViewController: UIViewController {
             priceLabel.bottomAnchor.constraint(equalTo: postImageView.bottomAnchor),
             priceLabel.leadingAnchor.constraint(equalTo: postImageView.leadingAnchor, constant:250)
         ])
+        
+        NSLayoutConstraint.activate([
+            emailLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 11.5),
+            emailLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            emailLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 180),
+            emailLabel.heightAnchor.constraint(equalToConstant:30)
+        ])
     }
     
     @objc func didTapButton() {
@@ -158,14 +172,24 @@ class PostViewController: UIViewController {
             favoriteButton.backgroundColor = .yellow
             
             NetworkManager.interested(itemId: post.id) {_ in
-                var animationView
+                var animationView: AnimationView?
+                animationView = .init(name: "favorite")
+                animationView!.frame = self.view.bounds
+                animationView!.contentMode = .scaleAspectFit
+                animationView!.loopMode = .playOnce
+                animationView!.animationSpeed = 0.8
+                self.view.addSubview(animationView!)
+                animationView!.play()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: {
+                    self.dismiss(animated: true, completion: nil)
+                })
             }
             
         }
-        else {
-            favoriteButton.setTitle("Favorite", for: .normal)
-            favoriteButton.backgroundColor = .gray
-        }
+//        else {
+//            favoriteButton.setTitle("Favorite", for: .normal)
+//            favoriteButton.backgroundColor = .gray
+//        }
     }
     /*
     // MARK: - Navigation

@@ -15,6 +15,7 @@ class ViewController: UIViewController, SFSafariViewControllerDelegate{
     let profileView = UINavigationController(rootViewController: MePageViewController())
     let mainView = UINavigationController(rootViewController: HomePageViewController())
     let signInButton = UIButton()
+    let backgroundView = UIImageView()
     //let signInButton = GIDSignInButton()
 
     override func viewDidLoad() {
@@ -29,8 +30,15 @@ class ViewController: UIViewController, SFSafariViewControllerDelegate{
             present(vc, animated: true)
         }
 
-        
+        title = "Login"
         view.backgroundColor = UIColor(red: 240/255, green: 240/255, blue: 240/255, alpha: 1)
+        
+        backgroundView.image = UIImage(named: "background")
+        backgroundView.translatesAutoresizingMaskIntoConstraints = false
+        backgroundView.clipsToBounds = true
+        backgroundView.layer.masksToBounds = true
+        backgroundView.contentMode = .scaleAspectFill
+        view.addSubview(backgroundView)
         
         signInButton.setTitle("Sign In",for: .normal)
         signInButton.backgroundColor = .white
@@ -64,8 +72,15 @@ class ViewController: UIViewController, SFSafariViewControllerDelegate{
     
     func setupConstraints() {
         NSLayoutConstraint.activate([
+            backgroundView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            backgroundView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            backgroundView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            backgroundView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
+            ])
+        
+        NSLayoutConstraint.activate([
             signInButton.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
-            signInButton.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor, constant: -30),
+            signInButton.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor, constant: 40),
             signInButton.widthAnchor.constraint(equalToConstant: 200),
             signInButton.heightAnchor.constraint(equalToConstant: 52)
         ])
