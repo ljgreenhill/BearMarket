@@ -16,7 +16,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         // Initialize sign-in
-        GIDSignIn.sharedInstance().clientID = "1092166511504-e2abe2pcbsqe7ssttfp0d45jmavno5cv.apps.googleusercontent.com"
+        GIDSignIn.sharedInstance().clientID = "98222376061-4tl3hvr1evbked3f6ns22s77cfab24k8.apps.googleusercontent.com"
         GIDSignIn.sharedInstance().delegate = self
 
         return true

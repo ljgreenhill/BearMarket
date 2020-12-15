@@ -21,12 +21,18 @@ PODS:
   - Kingfisher (5.15.8):
     - Kingfisher/Core (= 5.15.8)
   - Kingfisher/Core (5.15.8)
+  - lottie-ios (3.1.9)
+  - SnapKit (5.0.1)
+  - Tactile (3.0.1)
 
 DEPENDENCIES:
   - Alamofire
   - GoogleSignIn
   - ImagePicker
   - Kingfisher
+  - lottie-ios
+  - SnapKit
+  - Tactile
 
 SPEC REPOS:
   trunk:
@@ -37,6 +43,9 @@ SPEC REPOS:
     - GTMSessionFetcher
     - ImagePicker
     - Kingfisher
+    - lottie-ios
+    - SnapKit
+    - Tactile
 
 SPEC CHECKSUMS:
   Alamofire: 3b6a534a3df22db367e4dedeeca73d1ddfcf0e2f
@@ -46,7 +55,10 @@ SPEC CHECKSUMS:
   GTMSessionFetcher: b3503b20a988c4e20cc189aa798fd18220133f52
   ImagePicker: 1d950bbb2422548ed58791b4ec7f42fe42920511
   Kingfisher: a3c03d702433fa6cfedabb2bddbe076fb8f2e902
+  lottie-ios: 3a3758ef5a008e762faec9c9d50a39842f26d124
+  SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
+  Tactile: 266a3ddd39e670205de3987ded0414d9206ae300
 
-PODFILE CHECKSUM: 34a9eade30583de66e2f9663b5bf624454276f3a
+PODFILE CHECKSUM: 5d2a32455bdd074682a39ee01e08c822e4bf39cb
 
 COCOAPODS: 1.10.0

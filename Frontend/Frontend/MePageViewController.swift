@@ -23,10 +23,10 @@ class MePageViewController: UIViewController {
     let tabHeight: CGFloat = 40
     
     var profile: UserDataResponse!
-    let sellTag = Tag(name: "Selling")
-    let interestTag = Tag(name: "Interested")
-    let buyTag = Tag(name: "Bought")
-    var tags: [Tag]!
+//    let sellTag = Tag(name: "Selling")
+//    let interestTag = Tag(name: "Interested")
+//    let buyTag = Tag(name: "Bought")
+//    var tags: [Tag]!
     
     
     private var items: [PostDataResponse] = []
@@ -38,7 +38,7 @@ class MePageViewController: UIViewController {
         navigationController?.navigationBar.barTintColor = UIColor(red: 225/255, green: 225/255, blue: 225/255, alpha: 1)
         view.backgroundColor = .white
         
-        tags = [sellTag, interestTag, buyTag]
+//        tags = [sellTag, interestTag, buyTag]
         
         
         //Profile
@@ -202,7 +202,7 @@ func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection s
 func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
     let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemCellReuseIdentifier, for: indexPath) as! ItemCollectionViewCell
     let item = items[indexPath.row]
-    cell.configureItem(item: item)
+//    cell.configureItem(item: item)
     return cell
 }
 }

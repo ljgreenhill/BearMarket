@@ -48,28 +48,28 @@ class NewPostViewController: UIViewController {
         imageButton = UIButton()
         imageButton.setTitle("Select Image", for: .normal)
         imageButton.setTitleColor(.red, for: .normal)
-        imageButton.addTarget(self, action: #selector(pushImagePicker), for: .touchUpInside)
+//        imageButton.addTarget(self, action: #selector(pushImagePicker), for: .touchUpInside)
         imageButton.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(imageButton)
 
-        imageView = UIImageView(image: image?)
-        imageView.frame = CGRect(x: 0, y: 0, width: 100, height: 100)
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(imageView)
+//        imageView = UIImageView(image: image?)
+//        imageView.frame = CGRect(x: 0, y: 0, width: 100, height: 100)
+//        imageView.translatesAutoresizingMaskIntoConstraints = false
+//        view.addSubview(imageView)
         
         
-        image = UIImage()
-        image.translatesAutoresizingMaskIntoConstraints = false
-        imageView.addSubview(image)
+//        image = UIImage()
+//        image.translatesAutoresizingMaskIntoConstraints = false
+//        imageView.addSubview(image)
         
     }
     
     
-    @objc func pushImagePicker() {
-        let vc = ImagePickerViewController(delegate: self, titleString: imageButton.titleLabel?.text)
-        vc.delegate = self
-        navigationController?.pushViewController(vc, animated: true)
-    }
+//    @objc func pushImagePicker() {
+//        let vc = ImagePickerViewController(delegate: self, titleString: imageButton.titleLabel?.text)
+//        vc.delegate = self
+//        navigationController?.pushViewController(vc, animated: true)
+//    }
 
     @objc func createNewPost() {
         
@@ -77,9 +77,9 @@ class NewPostViewController: UIViewController {
     
 }
 
-extension NewPostViewController: saveImageDelegate {
-    func saveNewImage(newImage: UIImage) {
-        image = selectedImage
-    }
-}
+//extension NewPostViewController: saveImageDelegate {
+//    func saveNewImage(newImage: UIImage) {
+//        image = selectedImage
+//    }
+//}
 

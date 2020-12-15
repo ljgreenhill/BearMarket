@@ -10,5 +10,8 @@ target 'Frontend' do
     pod 'GoogleSignIn'
     pod 'Kingfisher'
     pod 'ImagePicker'
+    pod 'lottie-ios'
+    pod 'SnapKit'
+    pod 'Tactile'
 
 end

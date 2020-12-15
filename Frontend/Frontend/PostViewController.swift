@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Lottie
 
 class PostViewController: UIViewController {
     
@@ -15,7 +16,7 @@ class PostViewController: UIViewController {
     var postImageView = UIImageView()
     var postNameLabel = UILabel()
     var postDescription = UITextView()
-    var starImageView = UIImageView()
+    var favoriteButton = UIButton()
     var priceLabel = UILabel()
     
     init(post:PostDataResponse) {
@@ -78,12 +79,13 @@ class PostViewController: UIViewController {
         postDescription.font = .systemFont(ofSize: 11)
         view.addSubview(postDescription)
         
-        starImageView.image = UIImage(named: "Star1")
-        starImageView.translatesAutoresizingMaskIntoConstraints = false
-        starImageView.clipsToBounds = true
-        starImageView.layer.masksToBounds = true
-        starImageView.contentMode = .scaleAspectFill
-        view.addSubview(starImageView)
+        favoriteButton.setTitle("Favorite",for: .normal)
+        favoriteButton.backgroundColor = .gray
+        favoriteButton.setTitleColor(.black, for: .normal)
+        favoriteButton.translatesAutoresizingMaskIntoConstraints = false
+        favoriteButton.titleLabel?.font = .boldSystemFont(ofSize: 12)
+        favoriteButton.addTarget(self, action: #selector(didTapButton), for: .touchUpInside)
+        view.addSubview(favoriteButton)
         
         priceLabel.text = post.price
         priceLabel.backgroundColor = .gray
@@ -135,11 +137,11 @@ class PostViewController: UIViewController {
         ])
         
         NSLayoutConstraint.activate([
-            starImageView.topAnchor.constraint(equalTo: postNameLabel.topAnchor, constant: -3),
-            starImageView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -3),
-            starImageView.widthAnchor.constraint(equalToConstant: 25),
+            favoriteButton.topAnchor.constraint(equalTo: postNameLabel.topAnchor, constant: -6),
+            favoriteButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -3),
+            favoriteButton.widthAnchor.constraint(equalToConstant: 60),
             //starImageView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor,constant: 280),
-            starImageView.heightAnchor.constraint(equalToConstant: 25)
+            favoriteButton.heightAnchor.constraint(equalToConstant: 20)
         ])
         
         NSLayoutConstraint.activate([
@@ -148,6 +150,22 @@ class PostViewController: UIViewController {
             priceLabel.bottomAnchor.constraint(equalTo: postImageView.bottomAnchor),
             priceLabel.leadingAnchor.constraint(equalTo: postImageView.leadingAnchor, constant:250)
         ])
+    }
+    
+    @objc func didTapButton() {
+        if favoriteButton.titleLabel?.text == "Favorite" {
+            favoriteButton.setTitle("Favorite!", for: .normal)
+            favoriteButton.backgroundColor = .yellow
+            
+            NetworkManager.interested(itemId: post.id) {_ in
+                var animationView
+            }
+            
+        }
+        else {
+            favoriteButton.setTitle("Favorite", for: .normal)
+            favoriteButton.backgroundColor = .gray
+        }
     }
     /*
     // MARK: - Navigation

@@ -44,9 +44,9 @@ class FilterTableViewCell: UITableViewCell {
         }
     }
     
-    func configure(tag: Tag) {
-        name.text = tag.name
-    }
+//    func configure(tag: Tag) {
+//        name.text = tag.name
+//    }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

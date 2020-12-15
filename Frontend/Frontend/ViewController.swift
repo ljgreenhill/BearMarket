@@ -7,8 +7,9 @@
 
 import UIKit
 import GoogleSignIn
+import SafariServices
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, SFSafariViewControllerDelegate{
     
     let toolBarController = UITabBarController()
     let profileView = UINavigationController(rootViewController: MePageViewController())
@@ -18,6 +19,17 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let urlString = "https://bear-market.herokuapp.com"
+
+        if let url = URL(string: urlString) {
+            let vc = SFSafariViewController(url: url, entersReaderIfAvailable: true)
+            vc.delegate = self
+
+            present(vc, animated: true)
+        }
+
+        
         view.backgroundColor = UIColor(red: 240/255, green: 240/255, blue: 240/255, alpha: 1)
         
         signInButton.setTitle("Sign In",for: .normal)
@@ -26,13 +38,14 @@ class ViewController: UIViewController {
         signInButton.translatesAutoresizingMaskIntoConstraints = false
         signInButton.addTarget(self, action: #selector(didTapButton), for: .touchUpInside)
         view.addSubview(signInButton)
-        
+
         setupConstraints()
+//
 //        GIDSignIn.sharedInstance()?.presentingViewController = self
 //
-//          // Automatically sign in the user.
+//        // Automatically sign in the user.
 //        GIDSignIn.sharedInstance()?.restorePreviousSignIn()
-//
+////
 //          // ...
 //
 //        signInButton.translatesAutoresizingMaskIntoConstraints = false
@@ -65,21 +78,26 @@ class ViewController: UIViewController {
     @objc func didTapButton() {
         let tabBarVC = UITabBarController()
         tabBarVC.setViewControllers([mainView,profileView], animated: false)
-        
+
         mainView.title = "Home"
         profileView.title = "Profile"
-        
+
         guard let items = tabBarVC.tabBar.items else {
             return
         }
-        
+
         let images = ["house","person"]
         for x in 0..<items.count {
             items[x].image = UIImage(systemName: images[x])
         }
-        
+
         tabBarVC.modalPresentationStyle = .fullScreen
         present(tabBarVC, animated: true)
         
     }
+    
+    func safariViewControllerDidFinish(_ controller: SFSafariViewController) {
+        dismiss(animated: true)
+    }
+    
 }

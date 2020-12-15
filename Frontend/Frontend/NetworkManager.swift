@@ -150,6 +150,30 @@ class NetworkManager {
         
     }
     
+    // /posts/interested/<int:post_id>/
+    
+    static func interested(itemId: Int, completion: @escaping (PostDataResponse) -> Void) {
+        let parameters: [String: Any] = [
+            "id": itemId
+        ]
+        let endpoint = "\(host)posts/interested/"
+        AF.request("\(endpoint)\(itemId)/", method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: nil).validate().responseData { response in
+            switch response.result {
+            case .success(let data):
+                let jsonDecoder = JSONDecoder()
+
+                if let itemsData = try? jsonDecoder.decode(PostResponse.self, from: data) {
+                    let items = itemsData.data
+                    completion(items)
+                }
+
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
+        
+    }
+    
     //add posts to interested posts
     
     

@@ -24,6 +24,7 @@
 		AB9E4F182587591D0019FFCA /* PostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB9E4F172587591D0019FFCA /* PostViewController.swift */; };
 		AB9E4F3E258801E40019FFCA /* NewPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB9E4F3D258801E40019FFCA /* NewPostViewController.swift */; };
 		AB9E4F41258801EC0019FFCA /* ImagePickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB9E4F40258801EC0019FFCA /* ImagePickerViewController.swift */; };
+		AB9E4F4525884C400019FFCA /* favorite.json in Resources */ = {isa = PBXBuildFile; fileRef = AB9E4F4425884C400019FFCA /* favorite.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -47,6 +48,7 @@
 		AB9E4F172587591D0019FFCA /* PostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostViewController.swift; sourceTree = "<group>"; };
 		AB9E4F3D258801E40019FFCA /* NewPostViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewPostViewController.swift; sourceTree = "<group>"; };
 		AB9E4F40258801EC0019FFCA /* ImagePickerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagePickerViewController.swift; sourceTree = "<group>"; };
+		AB9E4F4425884C400019FFCA /* favorite.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = favorite.json; sourceTree = "<group>"; };
 		DB7C1D74B7801DEDE3DC77C3 /* Pods-Frontend.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Frontend.debug.xcconfig"; path = "Target Support Files/Pods-Frontend/Pods-Frontend.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -98,6 +100,7 @@
 				AB9E4F172587591D0019FFCA /* PostViewController.swift */,
 				AB9E4F14258741F40019FFCA /* NetworkManager.swift */,
 				AB7580A72586A6DF00862127 /* ItemCollectionView.swift */,
+				AB9E4F4425884C400019FFCA /* favorite.json */,
 				AB7580AD2586A74E00862127 /* Item.swift */,
 				AB7580D22586C83B00862127 /* Models.swift */,
 				AB9E4F40258801EC0019FFCA /* ImagePickerViewController.swift */,
@@ -182,6 +185,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				AB7580912586A47900862127 /* LaunchScreen.storyboard in Resources */,
+				AB9E4F4525884C400019FFCA /* favorite.json in Resources */,
 				AB7580C32586A8CB00862127 /* credentials.plist in Resources */,
 				AB75808E2586A47900862127 /* Assets.xcassets in Resources */,
 			);

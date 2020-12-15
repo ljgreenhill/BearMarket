@@ -7,6 +7,7 @@
 
 import UIKit
 
+
 class HomePageViewController: UIViewController {
     
     var itemCollectionView: UICollectionView!
