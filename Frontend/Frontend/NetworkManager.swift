@@ -239,6 +239,5 @@ class NetworkManager {
             }
         }
     }
-    
     //get all users
 }

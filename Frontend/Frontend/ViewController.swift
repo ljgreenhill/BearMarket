@@ -14,6 +14,7 @@ class ViewController: UIViewController, SFSafariViewControllerDelegate{
     let toolBarController = UITabBarController()
     let profileView = UINavigationController(rootViewController: MePageViewController())
     let mainView = UINavigationController(rootViewController: HomePageViewController())
+    let postingView = UINavigationController(rootViewController: NewPostViewController())
     let signInButton = UIButton()
     let backgroundView = UIImageView()
     //let signInButton = GIDSignInButton()
@@ -92,16 +93,17 @@ class ViewController: UIViewController, SFSafariViewControllerDelegate{
 
     @objc func didTapButton() {
         let tabBarVC = UITabBarController()
-        tabBarVC.setViewControllers([mainView,profileView], animated: false)
+        tabBarVC.setViewControllers([mainView,profileView,postingView], animated: false)
 
         mainView.title = "Home"
         profileView.title = "Profile"
+        postingView.title = "Posting"
 
         guard let items = tabBarVC.tabBar.items else {
             return
         }
 
-        let images = ["house","person"]
+        let images = ["house","person","camera"]
         for x in 0..<items.count {
             items[x].image = UIImage(systemName: images[x])
         }

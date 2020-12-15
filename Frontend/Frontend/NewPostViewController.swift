@@ -8,7 +8,7 @@ import UIKit
 import Lottie
 
 var postTitle : UITextField!
-var descript : UITextField!
+var descript : UITextView!
 var price : UITextField!
 var titleLabel: UILabel!
 var descriptLabel: UILabel!
@@ -33,8 +33,11 @@ class NewPostViewController: UIViewController {
         postTitle.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(postTitle)
         
-        descript = UITextField()
-        descript.placeholder = "Item Description"
+        descript = UITextView()
+        descript.text = "Enter Description Here"
+        descript.font = .systemFont(ofSize: 15)
+        descript.textColor = .gray
+        
         descript.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(descript)
         
@@ -58,7 +61,7 @@ class NewPostViewController: UIViewController {
         priceLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(priceLabel)
         
-        postButton = UIBarButtonItem(title: "Post", style: .plain, target: self, action: #selector(popAndSaveNewPost))
+        postButton = UIBarButtonItem(title: "Post", style: .plain, target: self, action: #selector(didTapButton))
         navigationItem.rightBarButtonItem = postButton
         
         //imagePicker = ContentView()
@@ -80,7 +83,7 @@ class NewPostViewController: UIViewController {
         view.addSubview(imageView)
         */
         
-
+        setUpConstraints()
         
     }
  
@@ -106,30 +109,31 @@ class NewPostViewController: UIViewController {
 
         
         NSLayoutConstraint.activate([
-            postTitle.topAnchor.constraint(equalTo: titleLabel.topAnchor, constant: 30),
+            postTitle.topAnchor.constraint(equalTo: titleLabel.topAnchor),
             postTitle.leadingAnchor.constraint(equalTo: titleLabel.trailingAnchor, constant: 15),
             postTitle.widthAnchor.constraint(equalToConstant: 100),
             postTitle.heightAnchor.constraint(equalToConstant: 30)
         ])
         NSLayoutConstraint.activate([
-            price.topAnchor.constraint(equalTo: priceLabel.topAnchor, constant: 30),
+            price.topAnchor.constraint(equalTo: priceLabel.topAnchor),
             price.leadingAnchor.constraint(equalTo: priceLabel.trailingAnchor, constant: 15),
             price.widthAnchor.constraint(equalToConstant: 100),
             price.heightAnchor.constraint(equalToConstant: 30)
         ])
         NSLayoutConstraint.activate([
-            descript.topAnchor.constraint(equalTo: descriptLabel.topAnchor, constant: 30),
-            descript.leadingAnchor.constraint(equalTo: descriptLabel.trailingAnchor, constant: 15),
-            descript.widthAnchor.constraint(equalToConstant: 100),
-            descript.heightAnchor.constraint(equalToConstant: 100)
+            descript.topAnchor.constraint(equalTo: descriptLabel.bottomAnchor),
+            descript.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10),
+            descript.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10),
+            descript.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20)
         ])
     }
     
-    @objc func popAndSaveNewPost() {
+    @objc func didTapButton() {
         
-        
-        if let navController = self.navigationController {
-            navController.popViewController(animated: true)
+        if let title = postTitle.text, let descript = descript.text, let price = price.text {
+            NetworkManager.newPost(title: title, description: descript, price: price, image: "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==")  { _ in
+                
+            }
         }
         
     }
@@ -150,33 +154,4 @@ extension NewPostViewController: saveImageDelegate {
     func saveNewImage(newImage: UIImage) {
         image = selectedImage
     }*/
-}
-
-extension NewPostViewController {
-    private func createPost(_ button: UIBarButtonItem) {
-        if let title = postTitle.text, let descript = descript.text, let price = price.text {
-            NetworkManager.newPost(title: title, description: descript, price: price, image: "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==")  { _ in
-                var animationView: AnimationView?
-
-                animationView = .init(name: "check-animation")
-                  
-                animationView!.frame = self.view.bounds
-                  
-                  
-                animationView!.contentMode = .scaleAspectFit
-                  
-                animationView!.loopMode = .playOnce
-                  
-                animationView!.animationSpeed = 0.8
-                  
-                self.view.addSubview(animationView!)
-                  
-                animationView!.play()
-                
-                DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: {
-                    self.dismiss(animated: true, completion: nil)
-                })
-        }
-    }
-}
 }
